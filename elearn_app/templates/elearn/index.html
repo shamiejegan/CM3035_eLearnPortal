@@ -1,0 +1,100 @@
+{% extends './base/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-9">
+        <div class="home-section profile-section">
+            <h2>Student</h2>
+            <div class="profile">
+                <image src="https://via.placeholder.com/150" alt="Profile Picture">
+                    <div class="profile-info">
+                        <p><strong>Full Name: </strong>Shamie Jegan</p>
+                        <p><strong>Email Address: </strong><a class="link-on-black" href="mailto:{{user_email}}">sample@user.com</a></p>
+                        <br>
+                        <a class="btn-yellow" href="/">Start Chat</a>
+                    </div>
+                </div>
+
+        </div>
+        <div class="home-section course-section">
+            <!-- begin if teacher -->
+            <div class="courselist-heading">
+                <h2>Courses</h2>
+                <a class="btn-yellow" href="/">Add Course</a>    
+            </div>
+            {% if courses_taught %}
+            <table class="table">
+                <th>
+                <td>Course Name</td>
+                <td>Course Description</td>
+                <td>Actions</td>
+                </th>
+                {% for course in courses_taught %}
+                <tr>
+                    <td>{{ course.course_name }}</td>
+                    <td>{{ course.course_description }}</td>
+                    <td><a href="/course/{{ course.id }}">View</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p>You have not created any courses. You will see your courses here once created.</p>
+            {% endif %}
+            <!-- end if teacher -->
+            <!-- begin if student -->
+            <div class="courselist-heading">
+                <h2>Courses</h2>
+                <a class="btn-yellow" href="/">Add Course</a>    
+            </div>
+            <!-- begin if courses_enrolled >1 -->
+            <table class="table">
+                <th>
+                <td>Course Name</td>
+                <td>Course Description</td>
+                <td>Deadlines</td>
+                <td>Actions</td>
+                </th>
+                {% for course in courses_enrolled %}
+                <tr>
+                    <td><a href="/course/{{ course.id }}"></a>{{ course.course_name }}</a></td>
+                    <td>{{ course.course_description }}</td>
+                    <td>
+                        <ul>
+                            {% for deadline in course.deadlines %}
+                            <li>{{ deadline }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <!-- else if courses_enrolled !>1 -->
+            <p>You have not registered for any courses. You will see your courses here once you have been registered.
+            </p>
+            <!-- end if courses_enrolled >1 -->
+            <!-- end if student -->
+
+        </div>
+
+    </div>
+    <div class="col-3">
+        <div class="home-section staus-section">
+            <h2>Status Updates</h2>
+            <form action="/" method="post">
+                <textarea name="status" id="status" cols="30" rows="10"></textarea>
+                <button type="submit">Post</button>
+                {% if status_updates %}
+                <div>
+                    <h3>Previous Status</h3>
+                    {% for status_update in status_updates %}
+                    <p>{{ status_update.status }}</p>
+                    <p>{{ status_update.timestamp}}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
