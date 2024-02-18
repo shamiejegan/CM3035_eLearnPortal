@@ -59,7 +59,6 @@ body {
 
 .content {
     background-color: #f7f7f7;
-    padding:10px;
     color: #292b2c;
     margin-bottom: 100px;
     min-height:80vh;
@@ -128,4 +127,24 @@ body {
     border-radius: 10px;
     border: #292b2c 2px solid;
     padding: 20px;
+}
+.form-group{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.form-group > label {
+    width: 30%;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 10px;
+}
+.form-group > input {
+    width: 60%;
+}
+
+.form-check-label {
+    margin-right: 10px;
 }

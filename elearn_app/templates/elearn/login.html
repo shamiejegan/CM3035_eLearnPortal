@@ -1,21 +1,22 @@
 {% extends './base/base.html' %}
+{% load django_bootstrap5 %}
 
 {% block content %}
-<!-- login page -->
 <div class="login-section">
     <h2>Login</h2>
-    <form action="/login" method="post">
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required> 
-        </div>
-        <button type="submit" class="btn-yellow">Login</button>
+    <form id="login-form" action="/login/" method="post">
+        {% csrf_token %}
+        Email: <input type="email" name="email" required/><br />
+        Password: <input type="password" name="password" required/><br />
+        <input type="submit" name="submit" value="Login" class="btn-yellow" />
     </form>
+    {% if error %}
+    {% bootstrap_messages %}
+    <div class="alert alert-warning" role="alert">
+        {{ error }}        
+    </div>
+    {% endif %}
+
     <p>Don't have an account? <a href="/register">Register</a></p>
 </div>
-
 {% endblock %}

@@ -1,6 +1,9 @@
 {% extends './base/base.html' %}
+{% load django_bootstrap5 %}
 
 {% block content %}
+
+{% include './base/navigation.html' %}
 <div class="row">
     <div class="col-9">
         <div class="home-section profile-section">
@@ -17,43 +20,25 @@
 
         </div>
         <div class="home-section course-section">
-            <!-- begin if teacher -->
             <div class="courselist-heading">
                 <h2>Courses</h2>
                 <a class="btn-yellow" href="/">Add Course</a>    
             </div>
-            {% if courses_taught %}
             <table class="table">
-                <th>
-                <td>Course Name</td>
-                <td>Course Description</td>
-                <td>Actions</td>
-                </th>
-                {% for course in courses_taught %}
+                <th>Course Name</th>
+                <th>Course Description</th>
+                <th>Deadlines</th>
                 <tr>
-                    <td>{{ course.course_name }}</td>
-                    <td>{{ course.course_description }}</td>
-                    <td><a href="/course/{{ course.id }}">View</a></td>
+                    <td><a href="/">Sample Course</a></td>
+                    <td>Sample Course Description</td>
+                    <td>
+                        <ul>
+                            <li>Assignment 1 - 10/10/2022</li>
+                            <li>Assignment 2 - 10/10/2022</li>
+                            <li>Assignment 3 - 10/10/2022</li>
+                        </ul>
+                    </td>
                 </tr>
-                {% endfor %}
-            </table>
-            {% else %}
-            <p>You have not created any courses. You will see your courses here once created.</p>
-            {% endif %}
-            <!-- end if teacher -->
-            <!-- begin if student -->
-            <div class="courselist-heading">
-                <h2>Courses</h2>
-                <a class="btn-yellow" href="/">Add Course</a>    
-            </div>
-            <!-- begin if courses_enrolled >1 -->
-            <table class="table">
-                <th>
-                <td>Course Name</td>
-                <td>Course Description</td>
-                <td>Deadlines</td>
-                <td>Actions</td>
-                </th>
                 {% for course in courses_enrolled %}
                 <tr>
                     <td><a href="/course/{{ course.id }}"></a>{{ course.course_name }}</a></td>
@@ -96,5 +81,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}

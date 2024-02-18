@@ -1,0 +1,22 @@
+{% extends './base/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="login-section">
+    <h2>Register</h2>
+    {% if registered %}
+    {% bootstrap_messages %}
+    <div class="alert alert-success" role="alert">
+        You have successfully registered. Please <a href="/login">login</a>.
+    </div>
+    {% else %}
+    <form id="register-form" action="/register/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ user_form.as_p}}
+        {{ profile_form.as_p}}
+        <input type="submit" name="submit" value="Register" class="btn-yellow" />
+    </form>
+    <p>Already have an account? <a href="/login">Login</a></p>
+    {% endif %}
+</div>
+{% endblock %}

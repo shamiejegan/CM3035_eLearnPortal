@@ -5,11 +5,14 @@ from django.contrib.auth.models import User
 # https://docs.djangoproject.com/en/5.0/ref/models/fields/ 
 # https://docs.djangoproject.com/en/dev/topics/auth/customizing/#extending-the-existing-user-model
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE) # will be using first name, last name, email, and is_active fields from User model
+class UserProfile(models.Model): # will be using first name, last name, email, and is_active fields from User model
+    user = models.OneToOneField(User, on_delete=models.CASCADE) 
     is_student = models.BooleanField(default=False)
     is_instructor = models.BooleanField(default=False)
     photo = models.ImageField(upload_to='user_photos/', blank=True, null=True) 
+
+    def __unicode__(self):
+        return self.user.username
 
 class Course(models.Model):
     id = models.AutoField(primary_key=True)
