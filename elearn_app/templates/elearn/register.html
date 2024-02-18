@@ -2,21 +2,40 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-<div class="login-section">
+<div class="form-section">
     <h2>Register</h2>
     {% if registered %}
-    {% bootstrap_messages %}
-    <div class="alert alert-success" role="alert">
-        You have successfully registered. Please <a href="/login">login</a>.
-    </div>
+        {% bootstrap_messages %}
+        <div class="alert alert-success" role="alert">
+            You have successfully registered. Please <a href="/login">login</a>.
+        </div>
     {% else %}
-    <form id="register-form" action="/register/" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ user_form.as_p}}
-        {{ profile_form.as_p}}
-        <input type="submit" name="submit" value="Register" class="btn-yellow" />
-    </form>
-    <p>Already have an account? <a href="/login">Login</a></p>
+        <form id="register-form" action="/register/" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ user_form.as_p}}
+            {{ profile_form.as_p}}
+            <input type="submit" name="submit" value="Register" class="btn-yellow" />
+        </form>
+        {% if error %}
+            {% bootstrap_messages %}
+            <div class="alert alert-warning" role="alert">
+                {{ error }}        
+            </div>
+        {% endif %}
+        <p>Already have an account? <a href="/login">Login</a></p>
     {% endif %}
 </div>
 {% endblock %}
+
+<script>
+    // JavaScript to toggle form fields based on checkbox selection
+    document.getElementById("id_is_student").addEventListener("change", function () {
+        var studentFields = document.getElementById("student_fields");
+        studentFields.style.display = this.checked ? "block" : "none";
+    });
+
+    document.getElementById("id_is_instructor").addEventListener("change", function () {
+        var instructorFields = document.getElementById("instructor_fields");
+        instructorFields.style.display = this.checked ? "block" : "none";
+    });
+</script>

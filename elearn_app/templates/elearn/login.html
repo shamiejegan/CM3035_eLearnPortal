@@ -2,13 +2,13 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-<div class="login-section">
+<div class="form-section">
     <h2>Login</h2>
-    <form id="login-form" action="/login/" method="post">
+    <form id="login-form" action="/login/" method="post" >
         {% csrf_token %}
-        Email: <input type="email" name="email" required/><br />
-        Password: <input type="password" name="password" required/><br />
-        <input type="submit" name="submit" value="Login" class="btn-yellow" />
+        <label>Email: </label><input type="email" name="email" required/><br />
+        <label>Password: </label><input type="password" name="password" required/><br />
+        <button type="submit" name="submit" class="btn-yellow">Login</button>
     </form>
     {% if error %}
     {% bootstrap_messages %}
