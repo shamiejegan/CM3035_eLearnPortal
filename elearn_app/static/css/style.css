@@ -38,9 +38,9 @@ body {
     background: #f0ad4e;
     padding:5px;
     color: #f7f7f7;
-    margin: 0px;
     display: flex;
     justify-content: space-between;
+    text-align: right;
 }
 .nav-bar a {
     color: #292b2c;
@@ -78,8 +78,8 @@ body {
     display: flex;
 }
 .profile img { 
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
 }
 .profile-info {
@@ -93,14 +93,80 @@ body {
     text-decoration: underline;
 }
 
-.courselist-heading {
+.homepage-heading {
     display: flex;
     justify-content: space-between;
+}
+
+.status-section {
+    margin:0px;
+    border-left: #AAA 2px solid;
+    height: 100%;
+    min-height: 80vh;
+}
+
+.form-section {
+    justify-content: center;
+    width:500px;
+    max-width: 90vw;
+    margin: 10px auto;
+    height: 100%;
+    border-radius: 10px;
+    border: #AAA 2px solid;
+    padding: 20px;
+}
+.form-section label {
+    display: inline-block;
+    width: 150px; 
+}
+
+.form-section input {
+    width: 300px;
+    padding: 10px;
+    margin: 10px 0px;
+    border-radius: 5px;
+    border: #AAA 1px solid;
+}
+
+.profile-update label {
+    width: 100%;
+    font-weight: bold;
+}
+.profile-update input {
+    width: 100%;
+}
+label[for="photo-clear_id"] {
+    width: auto;
+}
+input[id="photo-clear_id"] {
+    width: auto;
+    margin-right: 5px;
+}
+.profile-update a {
+    display: flex;
+    flex-direction: column;
+    width:100%
+}
+
+/* Style for the Currently link */
+.profile-update a.currently-link {
+    margin-right: 10px; /* Add some spacing to the right */
+}
+
+/* Style for the Clear checkbox */
+.profile-update input#photo-clear_id {
+    margin-right: 5px; /* Add some spacing to the right */
+}
+
+/* Style for the Change input */
+.profile-update input#id_photo {
+    margin-top: 5px; /* Add some margin at the top */
 }
 
 .btn-yellow {
     background-color: #f0ad4e;
     color: #292b2c;
+    border: none;
     font-weight: bold;
     text-decoration: none;
     padding: 10px 20px;
@@ -108,43 +174,23 @@ body {
     border-radius: 5px;
     cursor: pointer;
     margin-bottom: 10px;
-}
-
-.staus-section {
-    margin:0px;
-    border-left: #292b2c 2px solid;
-    height: 100%;
-    min-height: 80vh;
-}
-
-.login-section {
-    justify-content: center;
-    width:500px;
-    max-width: 90vw;
-    text-align: center;
-    margin: 10px auto;
-    height: 100%;
-    border-radius: 10px;
-    border: #292b2c 2px solid;
-    padding: 20px;
-}
-.form-group{
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
     margin-bottom: 10px;
 }
-
-.form-group > label {
-    width: 30%;
-    font-weight: bold;
-    text-align: right;
-    margin-right: 10px;
-}
-.form-group > input {
-    width: 60%;
+.login-section .btn-yellow {
+    width: 100%;
 }
 
-.form-check-label {
-    margin-right: 10px;
+.status-icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    background-color: #5cb85c;
+}
+
+.status-active {
+    background-color: #5cb85c;
+}
+.status-deactivated {
+    background-color: #d9534f;
 }

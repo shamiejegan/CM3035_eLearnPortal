@@ -9,30 +9,43 @@ class UserProfile(models.Model): # will be using first name, last name, email, a
     user = models.OneToOneField(User, on_delete=models.CASCADE) 
     is_student = models.BooleanField(default=False)
     is_instructor = models.BooleanField(default=False)
-    photo = models.ImageField(upload_to='user_photos/', blank=True, null=True) 
+    photo = models.ImageField(upload_to='elearn_app/user_photos/', blank=True, null=True) 
+    status = models.CharField(max_length=256, blank=True, null=True, default="")
 
-    def __unicode__(self):
+    def __str__(self):
         return self.user.username
 
 class Course(models.Model):
     id = models.AutoField(primary_key=True)
+    module_code = models.CharField(max_length=256, unique=True)
     title = models.CharField(max_length=256)
     # do not delete the course if the instructor is deleted. Related name courses_taught allows us to access all the courses a student is enrolled in
     instructor = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, related_name='courses_taught')
     # related name courses_enrolled allows us to access all the courses a student is enrolled in
     students = models.ManyToManyField(UserProfile, related_name='courses_enrolled')
 
+    def __str__(self):
+        return self.title
+
 class Material(models.Model):
     # related name materials allows us to access all the materials under a course 
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=256)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='materials')
     file = models.FileField(upload_to='course_materials/')
 
+    def __str__(self):
+        return self.title
+
 class Assignment(models.Model):
     id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=256)
     # related name assignments allows us to access all the assignments under a course 
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='assignments')
-    title = models.CharField(max_length=256)
     deadline = models.DateTimeField()
+
+    def __str__(self):
+        return self.title
 
 class Grade(models.Model):
     id = models.AutoField(primary_key=True)

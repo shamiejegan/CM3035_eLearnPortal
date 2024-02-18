@@ -3,81 +3,99 @@
 
 {% block content %}
 
-{% include './base/navigation.html' %}
+{% include './base/navigation-home.html' %}
 <div class="row">
     <div class="col-9">
         <div class="home-section profile-section">
-            <h2>Student</h2>
+            <div class="homepage-heading">
+                <h2>About Me</h2>
+                <a class="btn-yellow" href="/updateprofile/">Update Profile</a>
+            </div>
+
             <div class="profile">
-                <image src="https://via.placeholder.com/150" alt="Profile Picture">
-                    <div class="profile-info">
-                        <p><strong>Full Name: </strong>Shamie Jegan</p>
-                        <p><strong>Email Address: </strong><a class="link-on-black" href="mailto:{{user_email}}">sample@user.com</a></p>
+                {% if user_profile.photo %}
+                <img src="{{user_profile.photo.url }}" alt="Profile Picture">
+                {% else %}
+                <img src="../../static/images/default_user.png" alt="Profile Picture">
+                {% endif %}
+                <div class="profile-info">
+                    <p><strong>Full Name: </strong>{{user.first_name}} {{user.last_name}}</p>
+                    <p><strong>Email Address: </strong><a class="link-on-black"
+                            href="mailto:{{user.email}}">{{user.email}}</a></p>
+                        <p><strong>Status: </strong>
+                            <span class="status-icon {% if user.is_active %}status-active{% else %}status-deactivated{% endif %}"></span>
+                            <em>{% if user_profile.status %}{{user_profile.status}}{% else %}-{% endif %}</em>
+                        </p>
                         <br>
-                        <a class="btn-yellow" href="/">Start Chat</a>
-                    </div>
                 </div>
+            </div>
 
         </div>
-        <div class="home-section course-section">
-            <div class="courselist-heading">
-                <h2>Courses</h2>
-                <a class="btn-yellow" href="/">Add Course</a>    
+        <div class="home-section">
+            {% if user_profile.is_student %}
+            <div class="homepage-heading">
+                <h2>Enrolled Courses</h2>
+                <a class="btn-yellow" href="/">Add Course</a>
             </div>
+            {% if courses_enrolled %}
             <table class="table">
-                <th>Course Name</th>
-                <th>Course Description</th>
-                <th>Deadlines</th>
-                <tr>
-                    <td><a href="/">Sample Course</a></td>
-                    <td>Sample Course Description</td>
-                    <td>
-                        <ul>
-                            <li>Assignment 1 - 10/10/2022</li>
-                            <li>Assignment 2 - 10/10/2022</li>
-                            <li>Assignment 3 - 10/10/2022</li>
-                        </ul>
-                    </td>
-                </tr>
-                {% for course in courses_enrolled %}
-                <tr>
-                    <td><a href="/course/{{ course.id }}"></a>{{ course.course_name }}</a></td>
-                    <td>{{ course.course_description }}</td>
-                    <td>
-                        <ul>
-                            {% for deadline in course.deadlines %}
-                            <li>{{ deadline }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
+                <th>Module Code</th>
+                <th>Title</th>
+                <th>Instructor</th>
+                {% for enrolled in courses_enrolled %}
+                <tr> 
+                    <td><a href="/course/{{enrolled.id}}">{{ enrolled.module_code }}</a></td>
+                    <td>{{ enrolled.title }}</td>
+                    <td><a href="/profile/{{enrolled.instructor.id}}">{{ enrolled.instructor.user.get_full_name }}</a></td>
                 </tr>
                 {% endfor %}
-            </table>
-            <!-- else if courses_enrolled !>1 -->
-            <p>You have not registered for any courses. You will see your courses here once you have been registered.
-            </p>
-            <!-- end if courses_enrolled >1 -->
-            <!-- end if student -->
-
+                {% else %}
+                <p>You have not registered for any courses. You will see your courses here once you have been
+                    registered.</p>
+                {% endif %}
+                {% endif %}
+                {% if user_profile.is_instructor %}
+                <div class="courselist-heading">
+                    <h2>My Courses</h2>
+                    <a class="btn-yellow" href="newcourse">Add Course</a>
+                </div>
+                {% if courses_taught %}
+                <table class="table">
+                    <th>Module Code</th>
+                    <th>Title</th>
+                    <th>Students Enrolled</th>
+                    {% for taught in courses_taught %}
+                    <tr>
+                        <td><a href="/course/{{taught.id}}">{{ taught.module_code }}</a></td>
+                        <td>{{ taught.title }}</td>
+                        <td>
+                            <ol>
+                                {% for student in taught.students.all %}
+                                <li><a href="/profile/{{student.user.id}}">{{student.user.get_full_name}}</a></li>
+                                {% endfor %}
+                            </ol>
+                        </td>
+                        <td>
+                            <ul>
+                                {% for deadline in taught.deadlines %}
+                                <li>{{ deadline }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <p>You have not created any courses. You will see your courses here once you have created a course.
+                    </p>
+                    {% endif %}
+                    {% endif %}
+                </table>
         </div>
 
     </div>
     <div class="col-3">
-        <div class="home-section staus-section">
-            <h2>Status Updates</h2>
-            <form action="/" method="post">
-                <textarea name="status" id="status" cols="30" rows="10"></textarea>
-                <button type="submit">Post</button>
-                {% if status_updates %}
-                <div>
-                    <h3>Previous Status</h3>
-                    {% for status_update in status_updates %}
-                    <p>{{ status_update.status }}</p>
-                    <p>{{ status_update.timestamp}}</p>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </form>
+        <div class="home-section status-section">
+            <h2>Notifications</h2>
         </div>
     </div>
 </div>
