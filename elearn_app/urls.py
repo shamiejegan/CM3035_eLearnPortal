@@ -15,6 +15,7 @@ urlpatterns = [
     path("course/<int:pk>", views.CourseDetail.as_view(), name="course"),
     path("removecourse/<int:pk>", views.CourseDelete.as_view(), name="removecourse"),
     path("course/<int:pk>/newmaterial", views.MaterialCreate.as_view(), name="newmaterial"),
+    path("deletematerial/<int:course_pk>/<int:pk>", views.MaterialDelete.as_view(), name="newmaterial"),
     path("course/<int:pk>/newassignment", views.AssignmentCreate.as_view(), name="newassignment"),
     path("courselist/", views.CourseList.as_view(), name="courselist"),
     # URLs for enrollment management

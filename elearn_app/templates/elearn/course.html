@@ -41,16 +41,18 @@
             <!-- Course Materials -->
             <div class="heading-with-button">
                 <h3>Materials</h3>
-                {% if user_profile.is_instructor %} <a class="btn-yellow" href="/">+ Material</a>{% endif %}
+                {% if user_profile.is_instructor %}<a class="btn-yellow" href="/course/{{course.id}}/newmaterial">+ Material</a>{% endif %}
             </div>
             {% if materials %}
             <table class="table">
                 <th>S/N</th>
                 <th>Material</th>
+                {%if user_profile.is_instructor %}<th>Action</th>{% endif %}
                 {% for material in materials %}
                 <tr>
                     <td>{{forloop.counter}}</td>
-                    <td>{{material}}</td>
+                    <td><a href="{{material.file.url}}" target="_blank">{{material}}</a></td>
+                    {%if user_profile.is_instructor %}<td><a class="btn-red" href="/deletematerial/{{course.id}}/{{material.id}}">Delete</a></td>{% endif %}
                 </tr>
                 {% endfor %}
             </table>

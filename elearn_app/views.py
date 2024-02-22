@@ -18,6 +18,7 @@ from django.views.generic import DetailView, CreateView, UpdateView, DeleteView,
 def custom_page_not_found(request, exception):
     return render(request, '404.html', status=404)    
 
+# User views 
 def register(request):
     registered = False
 
@@ -137,6 +138,7 @@ class ProfileUpdate(UpdateView):
     def get_object(self, queryset=None):
         return self.request.user.userprofile
 
+# Course views
 class CourseDetail(DetailView):
     model = Course
     template_name = "elearn/course.html"
@@ -189,6 +191,72 @@ class CourseList(ListView):
         context["user_profile"] = user_profile
         return context
 
+class MaterialCreate(CreateView):
+    model = Material
+    form_class = MaterialForm
+    template_name = "elearn/material_form.html"
+
+    def get_success_url(self):
+        return reverse('course', kwargs={'pk': self.kwargs['pk']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        course = Course.objects.get(pk=self.kwargs['pk'])
+        context["course"] = course
+        return context
+
+    def form_valid(self, form):
+        # Get the course object
+        course = Course.objects.get(pk=self.kwargs['pk'])
+        # add the uploaded material to the course
+        material = form.save(commit=False)
+        material.course = course
+        material.save()
+        return super().form_valid(form)
+
+
+class MaterialDelete(DeleteView):
+    model = Material
+    template_name = "elearn/material_confirm_delete.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        course = Course.objects.get(pk=self.kwargs['course_pk'])
+        context["course"] = course
+        return context
+    
+    def get_success_url(self):
+        return reverse('course', kwargs={'pk': self.kwargs['course_pk']})
+
+
+# https://pypi.org/project/django-bootstrap-datepicker-plus/
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
+
+class AssignmentCreate(CreateView):
+    model = Assignment
+    fields = ['title', 'startdate', 'deadline']
+    template_name = "elearn/assignment_form.html"
+    success_url = "/"
+
+    def form_valid(self, form):
+        course = Course.objects.get(pk=self.kwargs['pk'])
+        form.instance.course = course
+        # Rename startdate and deadline fields 
+        form.fields['startdate'].label = "Start Date"
+        form.fields['deadline'].label = "Deadline"
+
+        # Use DateTimePickerInput for the startdate and deadline fields
+        form.fields['startdate'].widget = DateTimePickerInput()
+        form.fields['deadline'].widget = DateTimePickerInput()
+        return super().form_valid(form)
+
+class AssignmentDelete(DeleteView):
+    model = Assignment
+    template_name = "elearn/assignment_confirm_delete.html"
+    success_url = "/"
+
+
+# Enrollment views
 class EnrollStudents(UpdateView):
     model = Course
     template_name = "elearn/enroll_students.html"
@@ -219,64 +287,15 @@ class EnrollStudents(UpdateView):
         
         return super().form_valid(form)
 
-class EnrollToCourse(UpdateView):
-    # enroll requesting user to a specified course with a button click
-    model = Course
-    fields = ['students']
-
-
-class MaterialCreate(CreateView):
-    model = Material
-    fields = ['title', 'file']
-    template_name = "elearn/material_form.html"
-    success_url = "/"
-
-    def form_valid(self, form):
-        course = self.request.user.userprofile.courses_taught.get(pk=self.kwargs['pk'])
-        form.instance.course = course
-        return super().form_valid(form)
-
-# https://pypi.org/project/django-bootstrap-datepicker-plus/
-from bootstrap_datepicker_plus.widgets import DateTimePickerInput
-
-class AssignmentCreate(CreateView):
-    model = Assignment
-    fields = ['title', 'startdate', 'deadline']
-    template_name = "elearn/assignment_form.html"
-    success_url = "/"
-
-    def form_valid(self, form):
-        course = Course.objects.get(pk=self.kwargs['pk'])
-        form.instance.course = course
-        # Rename startdate and deadline fields 
-        form.fields['startdate'].label = "Start Date"
-        form.fields['deadline'].label = "Deadline"
-
-        # Use DateTimePickerInput for the startdate and deadline fields
-        form.fields['startdate'].widget = DateTimePickerInput()
-        form.fields['deadline'].widget = DateTimePickerInput()
-        return super().form_valid(form)
-
-class MaterialDelete(DeleteView):
-    model = Material
-    template_name = "elearn/material_confirm_delete.html"
-    success_url = "/"
-
-class AssignmentDelete(DeleteView):
-    model = Assignment
-    template_name = "elearn/assignment_confirm_delete.html"
-    success_url = "/"
-
-# Student enrollment in a course
 def enroll(request, pk):
     course = Course.objects.get(pk=pk)
     user_profile = UserProfile.objects.get(user=request.user)
     course.students.add(user_profile)
     return HttpResponseRedirect(reverse('course', kwargs={'pk': pk}))
 
-# Student unenrollment in a course
 def unenroll(request, pk):    
     course = Course.objects.get(pk=pk)
     user_profile = UserProfile.objects.get(user=request.user)
     course.students.remove(user_profile)
     return HttpResponseRedirect("/")
+

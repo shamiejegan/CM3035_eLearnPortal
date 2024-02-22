@@ -50,3 +50,16 @@ class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = ['module_code', 'title', 'students']
+
+    # ensure that module_code does not already exist
+    def clean_module_code(self):
+        module_code = self.cleaned_data['module_code']
+        if Course.objects.filter(module_code=module_code).exists():
+            raise forms.ValidationError("Module code already exists")
+        return module_code
+
+class MaterialForm(forms.ModelForm):
+    class Meta:
+        model = Material
+        fields = ['title', 'file']
+        

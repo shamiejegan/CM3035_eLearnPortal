@@ -14,11 +14,19 @@
             <label for="module_code">Module Code</label><br>
             <em>E.g. CC3035</em>
             <input type="text" class="form-control" id="module_code" name="module_code" >
+            <!-- catch errors -->
+            {% for error in form.title.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
         </div>
         <div class="form-group">
             <label for="title">Title</label><br>
             <em>E.g. Evolution Theory</em>
             <input type="text" class="form-control" id="title" name="title">
+            <!-- catch errors -->
+            {% for error in form.title.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
