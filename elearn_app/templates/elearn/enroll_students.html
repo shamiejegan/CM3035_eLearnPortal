@@ -1,0 +1,40 @@
+{% extends './base/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+{% include './base/navigation.html' %}
+<div class="form-section">
+    <h2>Class List for {{course.module_code}}</h2>
+    <p><a href="/course/{{course.id}}"> &lt; Back to Course</a></p>
+    <form method="post">
+        {% csrf_token %}
+        <!-- Don't allow module code or course title to be changed. This is only for reference for the instructor to know which course they are adding the student to -->
+        <div class="form-group">
+            <label for="module_code">Module Code</label>
+            <input type="text" class="form-control" id="module_code" name="module_code" value="{{ course.module_code }}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ course.title }}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="student">Students</label><br>
+            <em>Hold down CTRL key to add/remove students from the class list</em>
+            <!-- allow instructor to add mulitple students -->
+            <select class="form-select" id="student" name="students" multiple>
+                {% for student in all_students %}
+                    <!-- if student is enrolled, preselect them in list -->
+                    {% if student in enrolled_students %}
+                    <option value="{{ student.id }}" selected>{{student.user.get_full_name}} ({{student.user.email}})</option>
+                    {% else %}
+                    <option value="{{ student.id }}">{{student.user.get_full_name}} ({{student.user.email}})</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Enroll</button>
+    </form>
+</div>
+{% endblock %}

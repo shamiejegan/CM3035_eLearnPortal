@@ -24,6 +24,11 @@ a:hover {
     color: #004961;
 }
 
+label  {
+    font-weight: bold;
+
+}
+
 .header {
     background: #292b2c;
     color: #f7f7f7;

@@ -22,7 +22,7 @@ class Course(models.Model):
     # do not delete the course if the instructor is deleted. Related name courses_taught allows us to access all the courses a student is enrolled in
     instructor = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, related_name='courses_taught')
     # related name courses_enrolled allows us to access all the courses a student is enrolled in, null=True allows for courses with no students
-    students = models.ManyToManyField(UserProfile, related_name='courses_enrolled', null=True, blank=True)
+    students = models.ManyToManyField(UserProfile, related_name='courses_enrolled', blank=True)
 
     def __str__(self):
         return self.module_code # string returned as module code due to its uniqueness

@@ -1,0 +1,16 @@
+{% extends './base/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+{% include './base/navigation.html' %}
+<div class="form-section">
+    <h2>Confirm Delete</h2>
+    <p>Are you sure you want to delete <strong>{{course.module_code}} ({{course.title}})</strong>? Students will no longer be able to access this course once deleted.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="/course/{{course.id}}" class="btn btn-primary">No, Cancel</a>
+    </form>
+</div>
+{% endblock %}

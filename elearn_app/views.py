@@ -1,16 +1,18 @@
 from typing import Any
+from django.forms import BaseModelForm
 from django.shortcuts import render
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group, User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 
 
 from .models import * 
 from .forms import *
 
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import DetailView, CreateView, UpdateView, DeleteView 
 
 
 def custom_page_not_found(request, exception):
@@ -162,6 +164,41 @@ class CourseCreate(CreateView):
         user_profile = self.request.user.userprofile
         form.instance.instructor = user_profile
         return super().form_valid(form)
+
+class CourseDelete(DeleteView):
+    model = Course
+    template_name = "elearn/course_confirm_delete.html"
+    success_url = "/"
+
+class EnrollStudents(UpdateView):
+    model = Course
+    template_name = "elearn/enroll_students.html"
+    fields = ['students']
+    # redirect back to course page after updating the students
+    def get_success_url(self):
+        return reverse('course', kwargs={'pk': self.kwargs['pk']})
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        course = Course.objects.get(pk=self.kwargs['pk'])
+        # get all users with is_student set in their profile
+        context["all_students"] = UserProfile.objects.filter(is_student=True)
+        # get all the students enrolled in the course so that we can exclude them from the list of students to be enrolled
+        context["enrolled_students"] = Course.objects.get(pk=course.id).students.all()
+        context["course"] = course
+        return context
+    
+    # add students to db if form is valid 
+    def form_valid(self, form):
+        # Get list of selected students from the form submission
+        selected_student_ids = self.request.POST.getlist('students')
+        # Add each of the selected students to the course
+        course = form.instance
+        for student_id in selected_student_ids:
+            student = UserProfile.objects.get(pk=student_id)
+            course.students.add(student)  # Add selected students to the course
+        
+        return super().form_valid(form)
     
 class MaterialCreate(CreateView):
     model = Material
@@ -170,7 +207,7 @@ class MaterialCreate(CreateView):
     success_url = "/"
 
     def form_valid(self, form):
-        course = Course.objects.get(pk=self.kwargs['pk'])
+        course = self.request.user.userprofile.courses_taught.get(pk=self.kwargs['pk'])
         form.instance.course = course
         return super().form_valid(form)
 
@@ -189,7 +226,7 @@ class AssignmentCreate(CreateView):
         # Rename startdate and deadline fields 
         form.fields['startdate'].label = "Start Date"
         form.fields['deadline'].label = "Deadline"
-        
+
         # Use DateTimePickerInput for the startdate and deadline fields
         form.fields['startdate'].widget = DateTimePickerInput()
         form.fields['deadline'].widget = DateTimePickerInput()

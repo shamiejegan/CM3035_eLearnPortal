@@ -64,7 +64,7 @@
         <div class="page-section side-section">
             <div class="heading-with-button">
                 <h3>People</h3>
-                {% if user_profile.is_instructor %} <a class="btn-yellow" href="/enrollment/{{course.id}}">+ Student</a>{% endif %}
+                {% if user_profile.is_instructor %} <a class="btn-blue" href="/enrollstudents/{{course.id}}">Modify</a>{% endif %}
             </div>
             <div>
                 <p><em><strong>Instructor:</strong> {{course.instructor.user.get_full_name}}</em></p>
@@ -83,7 +83,7 @@
                     <!-- exclude user from list of students -->
                     {% if student.user != user %}
                     <tr>
-                        <td><a href="/profile/{{student.user.id}}">{{student.user.get_full_name}}{{student.user.id}}</a></td>
+                        <td><a href="/profile/{{student.user.id}}">{{student.user.get_full_name}}</a></td>
                         <!-- button to allow instructors to remove user from course -->
                         {% if user_profile.is_instructor %}
                         <td><a class="btn btn-danger btn-red" href="/remove_student/{{course.id}}/{{student.user.id}}">Remove</a>
