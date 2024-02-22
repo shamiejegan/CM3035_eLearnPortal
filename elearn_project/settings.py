@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-$cq^x)#9g0^i0x*dd8oq17xajcmcp#5n^mqip^5cy)x7gjy4*j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1"
+]
 
 
 # Application definition
@@ -33,6 +36,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'elearn_app',
     'django_bootstrap5',
+    'bootstrap_datepicker_plus',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
