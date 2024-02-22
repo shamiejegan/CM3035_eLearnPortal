@@ -25,7 +25,7 @@ class Course(models.Model):
     students = models.ManyToManyField(UserProfile, related_name='courses_enrolled')
 
     def __str__(self):
-        return self.title
+        return self.module_code # string returned as module code due to its uniqueness
 
 class Material(models.Model):
     # related name materials allows us to access all the materials under a course 
@@ -42,7 +42,8 @@ class Assignment(models.Model):
     title = models.CharField(max_length=256)
     # related name assignments allows us to access all the assignments under a course 
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='assignments')
-    deadline = models.DateTimeField()
+    startdate = models.DateTimeField(null=True, blank=True)
+    deadline = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.title

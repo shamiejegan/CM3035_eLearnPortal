@@ -6,8 +6,8 @@
 {% include './base/navigation-home.html' %}
 <div class="row">
     <div class="col-9">
-        <div class="home-section profile-section">
-            <div class="homepage-heading">
+        <div class="page-section profile-section">
+            <div class="heading-with-button">
                 <h2>About Me</h2>
                 <a class="btn-yellow" href="/updateprofile/">Update Profile</a>
             </div>
@@ -31,34 +31,33 @@
             </div>
 
         </div>
-        <div class="home-section">
+        <div class="page-section">
             {% if user_profile.is_student %}
-            <div class="homepage-heading">
+            <div class="heading-with-button">
                 <h2>Enrolled Courses</h2>
                 <a class="btn-yellow" href="/">Add Course</a>
             </div>
-            {% if courses_enrolled %}
-            <table class="table">
-                <th>Module Code</th>
-                <th>Title</th>
-                <th>Instructor</th>
-                {% for enrolled in courses_enrolled %}
-                <tr> 
-                    <td><a href="/course/{{enrolled.id}}">{{ enrolled.module_code }}</a></td>
-                    <td>{{ enrolled.title }}</td>
-                    <td><a href="/profile/{{enrolled.instructor.id}}">{{ enrolled.instructor.user.get_full_name }}</a></td>
-                </tr>
-                {% endfor %}
+                {% if courses_enrolled %}
+                <table class="table">
+                    <th>Module Code</th>
+                    <th>Title</th>
+                    <th>Instructor</th>
+                    {% for enrolled in courses_enrolled %}
+                    <tr> 
+                        <td><a href="/course/{{enrolled.id}}">{{ enrolled.module_code }}</a></td>
+                        <td>{{ enrolled.title }}</td>
+                        <td><a href="/profile/{{enrolled.instructor.id}}">{{ enrolled.instructor.user.get_full_name }}</a></td>
+                    </tr>
+                    {% endfor %}
                 {% else %}
-                <p>You have not registered for any courses. You will see your courses here once you have been
-                    registered.</p>
+                <p>You have not registered for any courses. You will see your courses here once you have been registered.</p>
                 {% endif %}
-                {% endif %}
-                {% if user_profile.is_instructor %}
-                <div class="courselist-heading">
-                    <h2>My Courses</h2>
-                    <a class="btn-yellow" href="newcourse">Add Course</a>
-                </div>
+            {% endif %}
+            {% if user_profile.is_instructor %}
+            <div class="heading-with-button">
+                <h2>My Courses</h2>
+                <a class="btn-yellow" href="newcourse">Add Course</a>
+            </div>
                 {% if courses_taught %}
                 <table class="table">
                     <th>Module Code</th>
@@ -94,7 +93,7 @@
 
     </div>
     <div class="col-3">
-        <div class="home-section status-section">
+        <div class="page-section side-section">
             <h2>Notifications</h2>
         </div>
     </div>

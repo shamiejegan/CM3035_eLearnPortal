@@ -4,6 +4,78 @@
 {% block content %}
 
 {% include './base/navigation.html' %}
-<h2>{{course.title}}</h2>
+<div class="row">
+    <div class="col-9">
+        <div class="page-section">
+            <h2>{{course.module_code}} ({{course.title}})</h2>
+            <br>
+        <!-- assignment list -->
+        <div class="heading-with-button">
+            <h3>Assignments</h3>
+            {% if user_profile.is_instructor %} <a class="btn-yellow" href="/">Add Assignment</a>{% endif %}
+        </div>
+        {% if assignments %}
+        <table class="table">
+            <th>S/N</th>
+            <th>Assignment</th>
+            <th>Start Date</th>
+            <th>Due Date</th>
+            {% for assignment in assignments %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{assignment}}</td>
+                <td>{{assignment.startdate}}</td>
+                <td>{{assignment.deadline}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No assignments added yet.</p>
+        {% endif %}
+        <!-- Course Materials -->
+        <div class="heading-with-button">
+            <h3>Materials</h3>
+            {% if user_profile.is_instructor %} <a class="btn-yellow" href="/">Add Materials</a>{% endif %}
+        </div>
+        {% if materials %}
+        <table class="table">
+            <th>S/N</th>
+            <th>Material</th>
+            {% for material in materials %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{material}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No materials uploaded yet.</p>
+        {% endif %}
+    </div>
+
+    </div>
+    <div class="col-3">
+        <div class="page-section side-section">
+            <h2>People</h2>
+            <p><em><strong>Instructor:</strong> {{course.instructor.user.get_full_name}}</em></p>
+            <!-- student list -->
+            <table class="table">
+                <th>{% if user_profile.is_student %}Classmates{% elif user_profile.is_instructor %}Students Enrolled {% endif %}</th>
+                <!-- Action only for instructors -->
+                {%if user_profile.is_instructor %}<th>Action</th> {% endif %}
+                {% for student in students %}
+                <tr>
+                    <td><a href="/profile/{{student.user.id}}">{{student.user.get_full_name}}</a></td>
+                    <!-- button to allow instructors to remove user from course -->
+                    {% if user_profile.is_instructor %}
+                    <td><a class="btn-red" href="/remove_student/{{course.id}}/{{student.user.id}}">Remove</a></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}

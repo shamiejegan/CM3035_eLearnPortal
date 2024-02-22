@@ -107,6 +107,19 @@ class CourseDetail(DetailView):
     model = Course
     template_name = "elearn/course.html"
     context_object_name = "course"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        course = self.object
+        context["students"] = Course.objects.get(pk=course.id).students.all()
+        context["instructor"] = Course.objects.get(pk=course.id).instructor
+        context["user_profile"] = UserProfile.objects.get(user=self.request.user)
+        context["user"] = course.instructor
+        # get all the materials for the course
+        context["materials"] = course.materials.all()
+        # get all the assignments for the course
+        context["assignments"] = course.assignments.all()
+        return context
+    
 
 class CourseCreate(CreateView):
     model = Course

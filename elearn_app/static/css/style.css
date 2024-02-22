@@ -5,6 +5,15 @@ body {
     background-color: #f7f7f7;
 }
 
+h2 {
+    font-weight: bold;
+    font-size: 32px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
 .header {
     background: #292b2c;
     color: #f7f7f7;
@@ -64,7 +73,7 @@ body {
     min-height:80vh;
 }
 
-.home-section {
+.page-section {
     margin:15px;
     padding: 20px;
 }
@@ -93,12 +102,12 @@ body {
     text-decoration: underline;
 }
 
-.homepage-heading {
+.heading-with-button {
     display: flex;
     justify-content: space-between;
 }
 
-.status-section {
+.side-section {
     margin:0px;
     border-left: #AAA 2px solid;
     height: 100%;

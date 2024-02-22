@@ -6,12 +6,12 @@
 {% include './base/navigation.html' %}
 <div class="row">
     <div class="col-12">
-        <div class="home-section profile-section">
+        <div class="page-section profile-section">
             <h2>{% if user_profile.is_instructor %}Instructor {% else %} Student {% endif %}</h2>
 
             <div class="profile">
                 {% if user_profile.photo %}
-                <img src="{{user_profile.photo.url }}" alt="Profile Picture">
+                <img src="{{user_profile.photo.url}}" alt="Profile Picture">
                 {% else %}
                 <img src="../../static/images/default_user.png" alt="Profile Picture">
                 {% endif %}
@@ -27,9 +27,9 @@
             </div>
 
         </div>
-        <div class="home-section course-section">
+        <div class="page-section course-section">
             {% if user_profile.is_student %}
-            <div class="homepage-heading">
+            <div class="heading-with-button">
                 <h2>{% if user_profile.is_instructor %}Courses Taught {% else %} Student {% endif %}Courses Enrolled</h2>
             </div>
                 {% if courses_enrolled %}
@@ -47,7 +47,7 @@
                 {% endif %}
             {% endif %}
             {% if user_profile.is_instructor %}
-            <div class="homepage-heading">
+            <div class="heading-with-button">
                 <h2>My Courses</h2>
             </div>
                 {% if courses_taught %}
