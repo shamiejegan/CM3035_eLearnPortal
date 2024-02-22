@@ -12,7 +12,7 @@ from django.urls import reverse
 from .models import * 
 from .forms import *
 
-from django.views.generic import DetailView, CreateView, UpdateView, DeleteView 
+from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, ListView
 
 
 def custom_page_not_found(request, exception):
@@ -170,6 +170,25 @@ class CourseDelete(DeleteView):
     template_name = "elearn/course_confirm_delete.html"
     success_url = "/"
 
+class CourseList(ListView):
+    model = Course
+    template_name = "elearn/course_list.html"
+    context_object_name = "courses"
+
+    # sort data by module_code
+    def get_queryset(self):
+        # Retrieve the queryset of courses and sort them by module_code
+        return Course.objects.all().order_by('module_code')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Get the details associated with the profile we are viewing
+        user_profile = UserProfile.objects.get(user=self.request.user) 
+        context["courses_taught"] = user_profile.courses_taught.all()
+        context["courses_enrolled"] = user_profile.courses_enrolled.all()
+        context["user_profile"] = user_profile
+        return context
+
 class EnrollStudents(UpdateView):
     model = Course
     template_name = "elearn/enroll_students.html"
@@ -199,7 +218,13 @@ class EnrollStudents(UpdateView):
             course.students.add(student)  # Add selected students to the course
         
         return super().form_valid(form)
-    
+
+class EnrollToCourse(UpdateView):
+    # enroll requesting user to a specified course with a button click
+    model = Course
+    fields = ['students']
+
+
 class MaterialCreate(CreateView):
     model = Material
     fields = ['title', 'file']
@@ -247,7 +272,7 @@ def enroll(request, pk):
     course = Course.objects.get(pk=pk)
     user_profile = UserProfile.objects.get(user=request.user)
     course.students.add(user_profile)
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(reverse('course', kwargs={'pk': pk}))
 
 # Student unenrollment in a course
 def unenroll(request, pk):    

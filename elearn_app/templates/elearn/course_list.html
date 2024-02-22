@@ -1,0 +1,37 @@
+{% extends './base/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+{% include './base/navigation.html' %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-section">
+            <h2>Course List</h2>
+            <div class="course-list">
+                {% if courses %}
+                <table class="table">
+                    <th>Module Code</th>
+                    <th>Title</th>
+                    <th>Actions</th>
+                    {% for course in courses %}
+                    <tr>
+                        <td>{{ course.module_code }}</td>
+                        <td>{{ course.title }}</td>
+                        <td>
+                                {% if user_profile.is_instructor or course in courses_enrolled %}
+                                <a class="btn btn-primary" href="/course/{{course.id}}">View</a>
+                                {% else %}
+                                <a class="btn btn-primary" href="/enroll/{{course.id}}">Enroll</a>
+                                {% endif %}
+                            </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% else %}
+                <p>No courses added yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}

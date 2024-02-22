@@ -8,7 +8,7 @@
     <div class="col-8">
         <div class="course-title-section">
             <h2>{{course.module_code}} ({{course.title}})</h2>
-            {%if user_profile.is_student%}<a class="btn btn-red btn-danger" href="/unenroll/{{course.id}}">Leave Course</a>{% endif %}
+            {%if user_profile.is_student%}<a class="btn btn-red btn-danger" href="/unenroll/{{course.id}}">Withdraw From Course</a>{% endif %}
             {%if user_profile.is_instructor %}<a class="btn btn-red btn-danger" href="/removecourse/{{course.id}}">Delete Course</a>{% endif %}
         </div>
         <div class="page-section faded-background">
@@ -78,17 +78,11 @@
                         {% elif user_profile.is_instructor and students|length == 0%}No students enrolled yet.
                         {% endif %}</th>
                     <!-- Action only for instructors -->
-                    {%if user_profile.is_instructor and students|length >= 1%}<th>Action</th> {% endif %}
                     {% for student in students %}
                     <!-- exclude user from list of students -->
                     {% if student.user != user %}
                     <tr>
                         <td><a href="/profile/{{student.user.id}}">{{student.user.get_full_name}}</a></td>
-                        <!-- button to allow instructors to remove user from course -->
-                        {% if user_profile.is_instructor %}
-                        <td><a class="btn btn-danger btn-red" href="/remove_student/{{course.id}}/{{student.user.id}}">Remove</a>
-                        </td>
-                        {% endif %}
                     </tr>
                     {% endif %}
                     {% endfor %}
