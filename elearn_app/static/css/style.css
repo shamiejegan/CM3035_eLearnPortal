@@ -134,11 +134,11 @@ label  {
     min-height: 80vh;
 }
 
-.form-section {
+.form-section, .form-section-v2 {
     justify-content: center;
-    width:500px;
+    width:800px;
     max-width: 90vw;
-    margin: 10px auto;
+    margin: 30px auto;
     height: 100%;
     border-radius: 10px;
     border: #AAA 2px solid;
@@ -153,6 +153,13 @@ label  {
     width: 300px;
     padding: 10px;
     margin: 10px 0px;
+    border-radius: 5px;
+    border: #AAA 1px solid;
+}
+
+.form-section-v2 input {
+    width: 300px;
+    padding: 10px;
     border-radius: 5px;
     border: #AAA 1px solid;
 }
@@ -263,4 +270,8 @@ input[id="photo-clear_id"] {
     margin: 5px;
     border-radius: 10px;
     border: #DDD 2px solid;
+}
+
+.input-group-text   {
+    line-height: normal;
 }

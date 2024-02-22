@@ -23,12 +23,14 @@
                 <th>Assignment</th>
                 <th>Start Date</th>
                 <th>Due Date</th>
+                {%if user_profile.is_instructor %}<th>Action</th>{% endif %}
                 {% for assignment in assignments %}
                 <tr>
                     <td>{{forloop.counter}}</td>
                     <td>{{assignment}}</td>
                     <td>{{assignment.startdate}}</td>
                     <td>{{assignment.deadline}}</td>
+                    {%if user_profile.is_instructor %}<td><a class="btn-red" href="/deleteassignment/{{course.id}}/{{assignment.id}}">Delete</a></td>{% endif %}
                 </tr>
                 {% endfor %}
             </table>

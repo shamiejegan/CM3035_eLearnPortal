@@ -62,4 +62,20 @@ class MaterialForm(forms.ModelForm):
     class Meta:
         model = Material
         fields = ['title', 'file']
-        
+
+# https://pypi.org/project/django-bootstrap-datepicker-plus/
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
+class AssignmentForm(forms.ModelForm):
+    class Meta:
+        model = Assignment
+        fields = ['title', 'startdate', 'deadline']
+        widgets = {
+            'startdate': DateTimePickerInput(),
+            'deadline': DateTimePickerInput(),
+        }
+        # modify labels 
+        labels = {
+            'title': 'Assignment Name',	
+            'startdate': 'Start Date',
+            'deadline': 'Deadline',
+        }

@@ -229,31 +229,41 @@ class MaterialDelete(DeleteView):
         return reverse('course', kwargs={'pk': self.kwargs['course_pk']})
 
 
-# https://pypi.org/project/django-bootstrap-datepicker-plus/
-from bootstrap_datepicker_plus.widgets import DateTimePickerInput
-
 class AssignmentCreate(CreateView):
     model = Assignment
-    fields = ['title', 'startdate', 'deadline']
+    form_class = AssignmentForm
     template_name = "elearn/assignment_form.html"
-    success_url = "/"
+
+    def get_success_url(self):
+        return reverse('course', kwargs={'pk': self.kwargs['pk']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        course = Course.objects.get(pk=self.kwargs['pk'])
+        context["course"] = course
+        return context
 
     def form_valid(self, form):
+        # Get the course object
         course = Course.objects.get(pk=self.kwargs['pk'])
-        form.instance.course = course
-        # Rename startdate and deadline fields 
-        form.fields['startdate'].label = "Start Date"
-        form.fields['deadline'].label = "Deadline"
-
-        # Use DateTimePickerInput for the startdate and deadline fields
-        form.fields['startdate'].widget = DateTimePickerInput()
-        form.fields['deadline'].widget = DateTimePickerInput()
+        # add assignment to the course
+        assignment = form.save(commit=False)
+        assignment.course = course
+        assignment.save()
         return super().form_valid(form)
 
 class AssignmentDelete(DeleteView):
     model = Assignment
     template_name = "elearn/assignment_confirm_delete.html"
-    success_url = "/"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        course = Course.objects.get(pk=self.kwargs['course_pk'])
+        context["course"] = course
+        return context
+
+    def get_success_url(self):
+        return reverse('course', kwargs={'pk': self.kwargs['course_pk']})
 
 
 # Enrollment views
