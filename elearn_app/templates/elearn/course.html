@@ -74,11 +74,11 @@
                     <!-- check size of the students list -->
                     <th>{% if user_profile.is_student and students|length > 1%}Classmates
                         {% elif user_profile.is_student and students|length == 1%}No classmates found.
-                        {% elif user_profile.is_instructor and students|length > 1%}Students Enrolled
-                        {% elif user_profile.is_instructor and students|length == 1%}No students enrolled yet.
+                        {% elif user_profile.is_instructor and students|length >= 1%}Students Enrolled
+                        {% elif user_profile.is_instructor and students|length == 0%}No students enrolled yet.
                         {% endif %}</th>
                     <!-- Action only for instructors -->
-                    {%if user_profile.is_instructor %}<th>Action</th> {% endif %}
+                    {%if user_profile.is_instructor and students|length >= 1%}<th>Action</th> {% endif %}
                     {% for student in students %}
                     <!-- exclude user from list of students -->
                     {% if student.user != user %}
