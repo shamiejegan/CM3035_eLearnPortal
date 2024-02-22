@@ -14,6 +14,16 @@ h3 {
     font-size: 24px;
 }
 
+a {
+    color: #007ca5;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #004961;
+}
+
 .header {
     background: #292b2c;
     color: #f7f7f7;
@@ -59,12 +69,14 @@ h3 {
     font-weight: bold;
 }
 .nav-bar a:hover {
-    border-bottom: #292b2c 2px solid;
+    color: #515557;
 }
 #logout {
     color: #c70021;
 }
-
+#logout:hover {
+    color: #8a0015;
+}
 
 .content {
     background-color: #f7f7f7;
@@ -74,14 +86,16 @@ h3 {
 }
 
 .page-section {
-    margin:15px;
-    padding: 20px;
+    margin:5px;
+    padding: 20px 20px 5px 20px;
 }
-
-.profile-section {
-    border-radius: 10px;
+.course-title-section {
+    padding: 20px 0px 0px 20px;
+}
+.top-black-section {
     background-color: #292b2c;
     color: #f7f7f7;
+    padding-bottom: 5px;
 }
 .profile {
     display: flex;
@@ -90,6 +104,7 @@ h3 {
     width: 100px;
     height: 100px;
     border-radius: 50%;
+    border: #AAA 2px solid ;
 }
 .profile-info {
     margin-left: 20px;
@@ -183,8 +198,40 @@ input[id="photo-clear_id"] {
     border-radius: 5px;
     cursor: pointer;
     margin-bottom: 10px;
-    margin-bottom: 10px;
+    text-align: center;
+    width: 150px;
 }
+.btn-blue {
+    background-color: #5bc0de;
+    color: #292b2c;
+    border: none;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 150px;
+}
+.btn-red {
+    background-color: #d9534f;
+    color: #f7f7f7;
+    border: none;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+
+}
+/* color pallets: #0275d8, $5cb85c, #5bc0de, #f0ad4e, #d9534f, #292b2c, #f7f7f7 */
+
 .login-section .btn-yellow {
     width: 100%;
 }
@@ -202,4 +249,13 @@ input[id="photo-clear_id"] {
 }
 .status-deactivated {
     background-color: #d9534f;
+}
+
+.faded-background {
+    background-color: white;
+    color: #292b2c;
+    padding: 20px;
+    margin: 5px;
+    border-radius: 10px;
+    border: #DDD 2px solid;
 }

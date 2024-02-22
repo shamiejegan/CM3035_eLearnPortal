@@ -4,28 +4,17 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group, User
 from django.http import HttpResponseRedirect
 from django.db import IntegrityError
+from django.shortcuts import get_object_or_404
+
 
 from .models import * 
 from .forms import *
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-# Create your views here.
-def index(request):
-    # first check if the user is logged in, show login page if they are not already logged in  
-    if request.user.is_authenticated:
-        # Retrieve the User details associated with the logged-in user
-        user = User.objects.get(username=request.user)
-        # Retrieve the UserProfile associated with the logged-in user
-        user_profile = UserProfile.objects.get(user=request.user)
-        # Get courses taught by the instructor (if any)
-        courses_taught = user_profile.courses_taught.all()
-        # Get courses enrolled by the student (if any)
-        courses_enrolled = user_profile.courses_enrolled.all()
-        return render(request, "elearn/index.html", {"user":user, "user_profile": user_profile, "courses_taught": courses_taught, "courses_enrolled": courses_enrolled})
-    else:
-        return HttpResponseRedirect("/login")
-    
+
+def custom_page_not_found(request, exception):
+    return render(request, '404.html', status=404)    
 
 def register(request):
     registered = False
@@ -103,6 +92,49 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect("/login")
 
+def index(request):
+    # first check if the user is logged in, show login page if they are not already logged in  
+    if request.user.is_authenticated:
+        # Retrieve the User details associated with the logged-in user
+        user = User.objects.get(username=request.user)
+        # Retrieve the UserProfile associated with the logged-in user
+        user_profile = UserProfile.objects.get(user=request.user)
+        # Get courses taught by the instructor (if any)
+        courses_taught = user_profile.courses_taught.all()
+        # Get courses enrolled by the student (if any)
+        courses_enrolled = user_profile.courses_enrolled.all()
+        return render(request, "elearn/index.html", {"user":user, "user_profile": user_profile, "courses_taught": courses_taught, "courses_enrolled": courses_enrolled})
+    else:
+        return HttpResponseRedirect("/login")
+
+class ProfileDetail(DetailView):
+    model = User
+    template_name = "elearn/profile.html"
+    context_object_name = "user"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Get the user with primary key
+        user = self.get_object()
+        # Get the details associated with the logged-in user
+        context["requester_user_profile"] = UserProfile.objects.get(user=self.request.user)
+        context["requester_enrolled_courses"] = context["requester_user_profile"].courses_enrolled.all()
+        # Get the details associated with the profile we are viewing
+        user_profile = get_object_or_404(UserProfile, user=user)
+        context["courses_taught"] = user_profile.courses_taught.all()
+        context["courses_enrolled"] = user_profile.courses_enrolled.all()
+        context["user_profile"] = user_profile
+        return context
+
+class ProfileUpdate(UpdateView):
+    model = UserProfile
+    template_name = "elearn/profile_form.html"
+    form_class = UpdateProfileForm
+    success_url = "/"
+
+    def get_object(self, queryset=None):
+        return self.request.user.userprofile
+
 class CourseDetail(DetailView):
     model = Course
     template_name = "elearn/course.html"
@@ -113,14 +145,13 @@ class CourseDetail(DetailView):
         context["students"] = Course.objects.get(pk=course.id).students.all()
         context["instructor"] = Course.objects.get(pk=course.id).instructor
         context["user_profile"] = UserProfile.objects.get(user=self.request.user)
-        context["user"] = course.instructor
+        context["user"] = self.request.user
         # get all the materials for the course
         context["materials"] = course.materials.all()
         # get all the assignments for the course
         context["assignments"] = course.assignments.all()
         return context
     
-
 class CourseCreate(CreateView):
     model = Course
     template_name = "elearn/course_form.html"
@@ -132,24 +163,58 @@ class CourseCreate(CreateView):
         form.instance.instructor = user_profile
         return super().form_valid(form)
     
-class ProfileDetail(DetailView):
-    model = UserProfile
-    template_name = "elearn/profile.html"
-    context_object_name = "user_profile"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["courses_taught"] = self.object.courses_taught.all()
-        context["courses_enrolled"] = self.object.courses_enrolled.all()
-        context["user_profile"] = self.object
-        context["user"] = self.object.user
-        return context
-
-class ProfileUpdate(UpdateView):
-    model = UserProfile
-    template_name = "elearn/profile_form.html"
-    form_class = UpdateProfileForm
+class MaterialCreate(CreateView):
+    model = Material
+    fields = ['title', 'file']
+    template_name = "elearn/material_form.html"
     success_url = "/"
 
-    def get_object(self, queryset=None):
-        return self.request.user.userprofile
+    def form_valid(self, form):
+        course = Course.objects.get(pk=self.kwargs['pk'])
+        form.instance.course = course
+        return super().form_valid(form)
+
+# https://pypi.org/project/django-bootstrap-datepicker-plus/
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
+
+class AssignmentCreate(CreateView):
+    model = Assignment
+    fields = ['title', 'startdate', 'deadline']
+    template_name = "elearn/assignment_form.html"
+    success_url = "/"
+
+    def form_valid(self, form):
+        course = Course.objects.get(pk=self.kwargs['pk'])
+        form.instance.course = course
+        # Rename startdate and deadline fields 
+        form.fields['startdate'].label = "Start Date"
+        form.fields['deadline'].label = "Deadline"
+        
+        # Use DateTimePickerInput for the startdate and deadline fields
+        form.fields['startdate'].widget = DateTimePickerInput()
+        form.fields['deadline'].widget = DateTimePickerInput()
+        return super().form_valid(form)
+
+class MaterialDelete(DeleteView):
+    model = Material
+    template_name = "elearn/material_confirm_delete.html"
+    success_url = "/"
+
+class AssignmentDelete(DeleteView):
+    model = Assignment
+    template_name = "elearn/assignment_confirm_delete.html"
+    success_url = "/"
+
+# Student enrollment in a course
+def enroll(request, pk):
+    course = Course.objects.get(pk=pk)
+    user_profile = UserProfile.objects.get(user=request.user)
+    course.students.add(user_profile)
+    return HttpResponseRedirect("/")
+
+# Student unenrollment in a course
+def unenroll(request, pk):    
+    course = Course.objects.get(pk=pk)
+    user_profile = UserProfile.objects.get(user=request.user)
+    course.students.remove(user_profile)
+    return HttpResponseRedirect("/")

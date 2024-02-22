@@ -6,65 +6,79 @@
 {% include './base/navigation.html' %}
 <div class="row">
     <div class="col-12">
-        <div class="page-section profile-section">
-            <h2>{% if user_profile.is_instructor %}Instructor {% else %} Student {% endif %}</h2>
+        <div class="page-section">
+            <div class="heading-with-button">
+                <h2>{%if user_profile.is_student%}Student{% elif user_profile.is_instructor %}Instructor{%endif%}</h2>
+            </div>
 
             <div class="profile">
                 {% if user_profile.photo %}
-                <img src="{{user_profile.photo.url}}" alt="Profile Picture">
+                <img src="{{ user_profile.photo.url }}" alt="Profile Picture">
                 {% else %}
                 <img src="../../static/images/default_user.png" alt="Profile Picture">
                 {% endif %}
                 <div class="profile-info">
-                    <p><strong>Full Name: </strong>{{user.first_name}} {{user.last_name}}</p>
-                    <p><strong>Email Address: </strong><a class="link-on-black"
-                            href="mailto:{{user.email}}">{{user.email}}</a></p>
+                    <p><strong>Full Name: </strong>{{ user.first_name }} {{ user.last_name }}</p>
+                    <p><strong>Email Address: </strong><a class="link-on-black" href="mailto:{{ user.email }}">{{ user.email }}</a></p>
                     <p><strong>Status: </strong>
                         <span class="status-icon {% if user.is_active %}status-active{% else %}status-deactivated{% endif %}"></span>
-                        <em>{% if user_profile.status %}{{user_profile.status}}{% else %}-{% endif %}</em>
+                        <em>{% if user_profile.status %}{{ user_profile.status }}{% else %}-{% endif %}</em>
                     </p>
+                    <br>
                 </div>
             </div>
-
+            
         </div>
-        <div class="page-section course-section">
+        <div class="page-section faded-background">
             {% if user_profile.is_student %}
             <div class="heading-with-button">
-                <h2>{% if user_profile.is_instructor %}Courses Taught {% else %} Student {% endif %}Courses Enrolled</h2>
+                <h3>I am learning...</h3>
             </div>
                 {% if courses_enrolled %}
                 <table class="table">
                     <th>Module Code</th>
                     <th>Title</th>
                     {% for enrolled in courses_enrolled %}
-                    <tr>
-                        <td><a href="/course/{{enrolled.id}}">{{ enrolled.module_code }}</a></td>
+                    <tr> 
+                        <td>{{ enrolled.module_code }}</td>
                         <td>{{ enrolled.title }}</td>
                     </tr>
                     {% endfor %}
                 {% else %}
-                    <p>This student has not enrolled for any courses yet.</p>
+                <p>You have not registered for any courses. You will see your courses here once you have been registered.</p>
                 {% endif %}
             {% endif %}
             {% if user_profile.is_instructor %}
             <div class="heading-with-button">
-                <h2>My Courses</h2>
+                <h3>I am teaching...</h3>
             </div>
                 {% if courses_taught %}
                 <table class="table">
                     <th>Module Code</th>
                     <th>Title</th>
+                    {%if requester_user_profile.is_student %}<th>Actions</th>{% endif %}
                     {% for taught in courses_taught %}
                     <tr>
-                        <td><a href="/course/{{taught.id}}">{{ taught.module_code }}</a></td>
-                        <td>{{ taught.title }}</td>
-                    </tr>
+                        <!-- if the requester is a student, check if they have been enrolled to the course -->
+                        {% if requester_user_profile.is_student %}
+                            {% if taught in requester_enrolled_courses %}
+                                <td><a href="/course/{{taught.id}}">{{ taught.module_code }}</a></td>
+                                <td>{{ taught.title }}</td>
+                                <td>You are already enrolled in this course.</td>
+                            {% else %}
+                                <td>{{ taught.module_code }}</td>
+                                <td>{{ taught.title }}</td>
+                                <td><a href="/enroll/{{taught.id}}" class="btn btn-primary">Enroll</a></td>
+                            {% endif %}
+                            
+                        {% endif %}
                     {% endfor %}
-                {% else %}
-                    <p>This instructor has not created any modules yet.</p>
-                {% endif %}
-            {% endif %}
-            </table>
+                    {% else %}
+                    <p>You have not created any courses. You will see your courses here once you have created a course.
+                    </p>
+                    {% endif %}
+                    {% endif %}
+                </table>
         </div>
 
     </div>

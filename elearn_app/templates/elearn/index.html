@@ -5,11 +5,11 @@
 
 {% include './base/navigation-home.html' %}
 <div class="row">
-    <div class="col-9">
-        <div class="page-section profile-section">
+    <div class="col-8">
+        <div class="page-section">
             <div class="heading-with-button">
                 <h2>About Me</h2>
-                <a class="btn-yellow" href="/updateprofile/">Update Profile</a>
+                <a class="btn-blue" href="/updateprofile/">Update</a>
             </div>
 
             <div class="profile">
@@ -31,11 +31,11 @@
             </div>
 
         </div>
-        <div class="page-section">
+        <div class="page-section faded-background">
             {% if user_profile.is_student %}
             <div class="heading-with-button">
                 <h2>Enrolled Courses</h2>
-                <a class="btn-yellow" href="/">Add Course</a>
+                <a class="btn-yellow" href="/">+ Enroll</a>
             </div>
                 {% if courses_enrolled %}
                 <table class="table">
@@ -46,7 +46,7 @@
                     <tr> 
                         <td><a href="/course/{{enrolled.id}}">{{ enrolled.module_code }}</a></td>
                         <td>{{ enrolled.title }}</td>
-                        <td><a href="/profile/{{enrolled.instructor.id}}">{{ enrolled.instructor.user.get_full_name }}</a></td>
+                        <td><a href="/profile/{{enrolled.instructor.user.id}}">{{ enrolled.instructor.user.get_full_name }}</a></td>
                     </tr>
                     {% endfor %}
                 {% else %}
@@ -55,32 +55,17 @@
             {% endif %}
             {% if user_profile.is_instructor %}
             <div class="heading-with-button">
-                <h2>My Courses</h2>
-                <a class="btn-yellow" href="newcourse">Add Course</a>
+                <h3>My Courses</h3>
+                <a class="btn-yellow" href="newcourse">+ Create</a>
             </div>
                 {% if courses_taught %}
                 <table class="table">
                     <th>Module Code</th>
                     <th>Title</th>
-                    <th>Students Enrolled</th>
                     {% for taught in courses_taught %}
                     <tr>
                         <td><a href="/course/{{taught.id}}">{{ taught.module_code }}</a></td>
                         <td>{{ taught.title }}</td>
-                        <td>
-                            <ol>
-                                {% for student in taught.students.all %}
-                                <li><a href="/profile/{{student.user.id}}">{{student.user.get_full_name}}</a></li>
-                                {% endfor %}
-                            </ol>
-                        </td>
-                        <td>
-                            <ul>
-                                {% for deadline in taught.deadlines %}
-                                <li>{{ deadline }}</li>
-                                {% endfor %}
-                            </ul>
-                        </td>
                     </tr>
                     {% endfor %}
                     {% else %}
@@ -92,9 +77,13 @@
         </div>
 
     </div>
-    <div class="col-3">
+    <div class="col-4">
         <div class="page-section side-section">
             <h2>Notifications</h2>
+            <div class="faded-background">
+                <p>There are no notifications at the moment.</p>
+            </div>
+
         </div>
     </div>
 </div>
