@@ -9,7 +9,17 @@
     <h2>Add new course</h2>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        <!-- specify form fields so that instructor will not be able to add students when creating the course. Adding students should be performed separately. -->
+        <div class="form-group">
+            <label for="module_code">Module Code</label><br>
+            <em>E.g. CC3035</em>
+            <input type="text" class="form-control" id="module_code" name="module_code" >
+        </div>
+        <div class="form-group">
+            <label for="title">Title</label><br>
+            <em>E.g. Evolution Theory</em>
+            <input type="text" class="form-control" id="title" name="title">
+        </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>

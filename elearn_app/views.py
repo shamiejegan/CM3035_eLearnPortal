@@ -102,9 +102,9 @@ def index(request):
         # Retrieve the UserProfile associated with the logged-in user
         user_profile = UserProfile.objects.get(user=request.user)
         # Get courses taught by the instructor (if any)
-        courses_taught = user_profile.courses_taught.all()
+        courses_taught = user_profile.courses_taught.order_by('module_code')
         # Get courses enrolled by the student (if any)
-        courses_enrolled = user_profile.courses_enrolled.all()
+        courses_enrolled = user_profile.courses_enrolled.order_by('module_code')
         return render(request, "elearn/index.html", {"user":user, "user_profile": user_profile, "courses_taught": courses_taught, "courses_enrolled": courses_enrolled})
     else:
         return HttpResponseRedirect("/login")
