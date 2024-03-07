@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'elearn_app',
+    'rest_framework',
     'django_bootstrap5',
     'bootstrap_datepicker_plus',
     'django.contrib.admin',
@@ -45,6 +46,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -66,6 +66,13 @@ label  {
     justify-content: space-between;
     text-align: right;
 }
+.nav-bar-left {
+    display: flex;
+    justify-content: flex-start;
+}
+.current-nav {
+    border-bottom: #292b2c 2px solid;
+}
 .nav-bar a {
     color: #292b2c;
     text-decoration: none;
@@ -76,6 +83,7 @@ label  {
 .nav-bar a:hover {
     color: #515557;
 }
+
 #logout {
     color: #c70021;
 }
