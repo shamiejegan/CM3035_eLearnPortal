@@ -7,7 +7,21 @@
 <div class="row">
     <div class="col-12">
         <div class="page-section">
-            <h2>Course List</h2>
+            <h2>Search</h2>
+            <div>
+                <form method="GET" action="/courselist/">
+                    <div class="form-group">
+                        <label for="search">Find a course: </label>
+                        <input type="text" class="form-control" id="search" name="search" placeholder="Enter a module code or course name">
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Find</button>
+                </form>
+                <br>
+            </div>
+            <hr>
+
+            <h2>Course Catalogue</h2>
             <div class="course-list">
                 {% if courses %}
                 <table class="table">
@@ -20,9 +34,9 @@
                         <td>{{ course.title }}</td>
                         <td>
                                 {% if user_profile.is_instructor or course in courses_enrolled %}
-                                <a class="btn btn-primary" href="/course/{{course.id}}">View</a>
+                                <a class="btn btn-dark" href="/course/{{course.id}}">View course</a>
                                 {% else %}
-                                <a class="btn btn-primary" href="/enroll/{{course.id}}">Enroll</a>
+                                <a class="btn btn-primary" href="/enroll/{{course.id}}">Enrol</a>
                                 {% endif %}
                             </td>
                     </tr>

@@ -9,7 +9,8 @@
     <div class="col-8">
         <div class="course-title-section">
             <h2>{{course.module_code}} ({{course.title}})</h2>
-            {%if user_profile.is_student%}<a class="btn btn-red btn-danger" href="/unenroll/{{course.id}}">Withdraw From Course</a>{% endif %}
+            {%if user_profile.is_student%}<a class="btn btn-blue" href="/feedback/{{course.id}}/{{user.id}}">Leave a Feedback</a>{% endif %}
+            {%if user_profile.is_student%}<a class="btn btn-red btn-danger" href="/unenroll/{{course.id}}/{{user.id}}">Withdraw From Course</a>{% endif %}
             {%if user_profile.is_instructor %}<a class="btn btn-red btn-danger" href="/removecourse/{{course.id}}">Delete Course</a>{% endif %}
         </div>
         <div class="page-section faded-background">
@@ -69,7 +70,7 @@
         <div class="page-section side-section">
             <div class="heading-with-button">
                 <h3>People</h3>
-                {% if user_profile.is_instructor %} <a class="btn-blue" href="/enrollstudents/{{course.id}}">Modify</a>{% endif %}
+                <a class="btn-blue" href="/">Live Chat</a>
             </div>
             <div>
                 <p><em><strong>Instructor:</strong> {{course.instructor.user.get_full_name}}</em></p>
@@ -87,7 +88,9 @@
                     <!-- exclude user from list of students -->
                     {% if student.user != user %}
                     <tr>
-                        <td><a href="/profile/{{student.user.id}}">{{student.user.get_full_name}}</a></td>
+                        <!-- add link to remove student for teachers -->
+                        <td><a href="/profile/{{student.user.id}}">{{student.user.get_full_name}}</a> 
+                            {% if user_profile.is_instructor %}(<a style="color:rgb(236, 84, 84)" href="/unenroll/{{course.id}}/{{student.user.id}}">remove</a>){% endif %}</td>
                     </tr>
                     {% endif %}
                     {% endfor %}

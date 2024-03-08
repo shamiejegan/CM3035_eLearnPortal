@@ -27,9 +27,8 @@ urlpatterns = [
     path("deleteassignment/<int:course_pk>/<int:pk>", login_required(views.AssignmentDelete.as_view()), name="removeassignment"),
 
     # URLs for enrollment management
-    path("enrollstudents/<int:pk>", login_required(views.EnrollStudents.as_view()), name="enrollstudents"),	#performed by instructor
     path("enroll/<int:pk>", views.enroll, name="enroll"), #performed by student
-    path("unenroll/<int:pk>", views.unenroll, name="unenroll"),	
+    path("unenroll/<int:courseid>/<int:studentid>/", views.unenroll, name="unenroll"),	
     # URLs for API
     path("api/course/<int:pk>", api.course_detail, name="api_course"),
 

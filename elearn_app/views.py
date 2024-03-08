@@ -181,6 +181,18 @@ class UserList(ListView):
 
 # Course views
 class CourseDetail(DetailView):
+    permission_required = 'elearn_app.view_course'
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            if not request.user.has_perm('elearn_app.view_course'):
+                # Return 404 error if user does not have permission to add a course
+                return HttpResponse(status=404) 
+        except PermissionDenied:
+            # Handle PermissionDenied exception without raising it further
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
     model = Course
     template_name = "elearn/course.html"
     context_object_name = "course"
@@ -240,14 +252,33 @@ class CourseDelete(DeleteView):
     success_url = "/"
 
 class CourseList(ListView):
+    permission_required = 'elearn_app.view_course'
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            if not request.user.has_perm('elearn_app.view_course'):
+                # Return 404 error if user does not have permission to add a course
+                return HttpResponse(status=404) 
+        except PermissionDenied:
+            # Handle PermissionDenied exception without raising it further
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
     model = Course
     template_name = "elearn/course_list.html"
     context_object_name = "courses"
 
     # sort data by module_code
     def get_queryset(self):
-        # Retrieve the queryset of courses and sort them by module_code
-        return Course.objects.all().order_by('module_code')
+        search_query = self.request.GET.get('search')
+        # Filter users by first name, last name, and email starting with the value entered in the search query
+        if search_query:
+            queryset = Course.objects.filter(module_code__startswith=search_query) | Course.objects.filter(title__contains=search_query) 
+        else:
+            # If there is no search query, return all users
+            queryset = Course.objects.all()
+        # Order the results by first name (A-Z)
+        return queryset.order_by('module_code')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -418,9 +449,9 @@ def enroll(request, pk):
     return HttpResponseRedirect(reverse('course', kwargs={'pk': pk}))
 
 @login_required
-def unenroll(request, pk):    
-    course = Course.objects.get(pk=pk)
-    user_profile = UserProfile.objects.get(user=request.user)
+def unenroll(request, courseid, studentid):    
+    course = Course.objects.get(pk=courseid)
+    user_profile = UserProfile.objects.get(user=studentid)
     course.students.remove(user_profile)
     return HttpResponseRedirect("/")
 
