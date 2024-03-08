@@ -154,15 +154,29 @@ class StatusUpdate(UpdateView):
         user_profile.save()
         return super().form_valid(form)
     
+class UserList(ListView):
+    model = User
+    template_name = "elearn/user_list.html"
+    context_object_name = "users"
 
-# class ProfileUpdate(UpdateView):
-#     model = UserProfile
-#     template_name = "elearn/profile_form.html"
-#     form_class = UpdateProfileForm
-#     success_url = "/"
-
-#     def get_object(self, queryset=None):
-#         return self.request.user.userprofile
+    def get_queryset(self):
+        # Retrieve the search query 
+        search_query = self.request.GET.get('search')
+        # Filter users by first name, last name, and email starting with the value entered in the search query
+        if search_query:
+            queryset = User.objects.filter(first_name__startswith=search_query) | User.objects.filter(last_name__startswith=search_query) | User.objects.filter(email__startswith=search_query)
+        else:
+            # If there is no search query, return all users
+            queryset = User.objects.all()
+        # Order the results by first name (A-Z)
+        return queryset.order_by('first_name')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Get the details associated with the profile we are viewing
+        user_profile = UserProfile.objects.get(user=self.request.user)
+        context["user_profile"] = user_profile
+        return context
 
 # Course views
 class CourseDetail(DetailView):

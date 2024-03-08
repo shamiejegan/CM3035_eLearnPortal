@@ -1,0 +1,72 @@
+{% extends './base/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+{% include './base/navigation.html' %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-section">
+            <h2>Search</h2>
+            <div>
+                <form method="GET" action="/userlist/">
+                    <div class="form-group">
+                        <label for="search">Find a user: </label>
+                        <input type="text" class="form-control" id="search" name="search" placeholder="Enter user's name or email address">
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Find</button>
+                </form>
+                <br>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="user-list col-5">
+                    <h3>Students</h3>
+                    {% if users %}
+                    <table class="table">
+                        <th>Full Name</th>
+                        <th>Email Addresses</th>
+                        {% for student in users %}
+                        <!-- only show student profiles -->
+                        {% if student.userprofile.is_student %}
+                        <tr>
+                            <td><a href="/profile/{{ user.id }}">{{ student.first_name }} {{ student.last_name }}</a></td>
+                            <td>{{ student.email }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </table>
+                    {% else %}
+                    <p>No users found.</p>
+                    {% endif %}
+                </div>
+
+                <!-- space between tables -->
+                <div class="col-1"></div>
+
+                <div class="user-list col-5">
+                    {% if users %}
+                    <h3>Teachers</h3>
+                    <table class="table">
+                        <th>Full Name</th>
+                        <th>Email Addresses</th>
+                        {% for teacher in users %}
+                        <!-- only show teacher profiles, excluding user's own profile -->
+                        {% if teacher.userprofile.is_instructor and user != teacher %}
+                        <tr>
+                            <td><a href="/profile/{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</a></td>
+                            <td>{{ teacher.email }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </table>
+                    {% else %}
+                    <p>No users found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

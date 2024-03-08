@@ -2,9 +2,11 @@
 <div class="nav-bar">
     <div class="nav-bar-left">
         <a href="/">Home</a>
-        <a href="/courselist/">Courses</a>
-        <a href="/">Users</a>
+        <!-- only show course list to students -->
+        {% if user_profile.is_student %}<a href="/courselist/">Find Courses</a>{% endif %}
+        <!-- only show user list to instructors -->
+        {% if user_profile.is_instructor %}<a href="/userlist/">Find Users</a>{% endif %}
         <a href="/">APIs</a>
     </div>
-    <a id = "logout" href="/logout">Logout</a>
+    <a id="logout" href="/logout">Logout</a>
 </div>

@@ -22,9 +22,9 @@
                     <p><a href="/change-photo/" style="font-weight: normal;">Change Photo</a></p>
                 </div>
                 <div class="profile-info">
+                    <p><strong>Account Type: </strong>{% if user_profile.is_student %}Student{% else %}Instructor{% endif %}</p>
                     <p><strong>Full Name: </strong>{{user.first_name}} {{user.last_name}}</p>
-                    <p><strong>Email Address: </strong><a class="link-on-black"
-                            href="mailto:{{user.email}}">{{user.email}}</a></p>
+                    <p><strong>Email Address: </strong>{{user.email}}</p>
                     <p><strong>Status: </strong>
                         <span
                             class="status-icon {% if user.is_active %}status-active{% else %}status-deactivated{% endif %}"></span>
