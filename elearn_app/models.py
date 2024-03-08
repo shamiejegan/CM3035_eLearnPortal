@@ -48,16 +48,6 @@ class Assignment(models.Model):
     def __str__(self):
         return self.title
 
-class Grade(models.Model):
-    id = models.AutoField(primary_key=True)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='grades')
-    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='grades')
-    student = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='grades_received')
-    grade = models.IntegerField()
-    class Meta:
-        # Ensure each student has only one grade for each assignment
-        unique_together = ('student', 'assignment')  
-
 class Feedback(models.Model):
     id = models.AutoField(primary_key=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='feedbacks_received')

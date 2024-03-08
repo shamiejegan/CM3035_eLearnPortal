@@ -18,10 +18,6 @@ class MaterialAdmin(admin.ModelAdmin):
 class AssignmentAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(Grade)
-class GradeAdmin(admin.ModelAdmin):
-    pass
-
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
     pass
