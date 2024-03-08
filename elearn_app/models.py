@@ -30,9 +30,9 @@ class Course(models.Model):
 class Material(models.Model):
     # related name materials allows us to access all the materials under a course 
     id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=256)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='materials')
-    file = models.FileField(upload_to='course_materials/')
+    title = models.CharField(max_length=256, blank=False, null=False)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='materials', blank=False, null=False)
+    file = models.FileField(upload_to='course_materials/', blank=False, null=False)
 
     def __str__(self):
         return self.title

@@ -259,6 +259,18 @@ class CourseList(ListView):
         return context
 
 class MaterialCreate(CreateView):
+    permission_required = 'elearn_app.add_material'
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            if not request.user.has_perm('elearn_app.add_material'):
+                # Return 404 error if user does not have permission to add a course
+                return HttpResponse(status=404) 
+        except PermissionDenied:
+            # Handle PermissionDenied exception without raising it further
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
     model = Material
     form_class = MaterialForm
     template_name = "elearn/material_form.html"
@@ -282,6 +294,18 @@ class MaterialCreate(CreateView):
         return super().form_valid(form)
 
 class MaterialDelete(DeleteView):
+    permission_required = 'elearn_app.delete_material'
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            if not request.user.has_perm('elearn_app.delete_material'):
+                # Return 404 error if user does not have permission to add a course
+                return HttpResponse(status=404) 
+        except PermissionDenied:
+            # Handle PermissionDenied exception without raising it further
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
     model = Material
     template_name = "elearn/material_confirm_delete.html"
 
@@ -295,6 +319,18 @@ class MaterialDelete(DeleteView):
         return reverse('course', kwargs={'pk': self.kwargs['course_pk']})
 
 class AssignmentCreate(CreateView):
+    permission_required = 'elearn_app.add_assignment'
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            if not request.user.has_perm('elearn_app.add_assignment'):
+                # Return 404 error if user does not have permission to add a course
+                return HttpResponse(status=404) 
+        except PermissionDenied:
+            # Handle PermissionDenied exception without raising it further
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
     model = Assignment
     form_class = AssignmentForm
     template_name = "elearn/assignment_form.html"
@@ -318,6 +354,18 @@ class AssignmentCreate(CreateView):
         return super().form_valid(form)
 
 class AssignmentDelete(DeleteView):
+    permission_required = 'elearn_app.delete_assignment'
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            if not request.user.has_perm('elearn_app.delete_assignment'):
+                # Return 404 error if user does not have permission to add a course
+                return HttpResponse(status=404) 
+        except PermissionDenied:
+            # Handle PermissionDenied exception without raising it further
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
     model = Assignment
     template_name = "elearn/assignment_confirm_delete.html"
 

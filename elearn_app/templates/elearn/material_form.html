@@ -11,6 +11,10 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Upload</button>
+        <!-- catch errors -->
+        {% if form.errors %}
+        <div class="alert alert-warning"><p>The following errors have been detected in your submission:</p>{{ form.errors }}</div>
+        {% endif %}
     </form>
 </div>
 

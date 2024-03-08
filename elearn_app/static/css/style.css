@@ -169,7 +169,7 @@ label  {
 }
 
 .form-section-v2 input {
-    width: 300px;
+    width: 90%;
     padding: 10px;
     border-radius: 5px;
     border: #AAA 1px solid;

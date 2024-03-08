@@ -15,8 +15,9 @@ urlpatterns = [
     path("change-photo/", login_required(views.PictureUpdate.as_view()), name="change_photo"),
     path("update-status/", login_required(views.StatusUpdate.as_view()), name="update_status"),
     path("userlist/", login_required(views.UserList.as_view()), name="userlist"),
-    
+
     # URLs for course management
+    path("courselist/", login_required(views.CourseList.as_view()), name="courselist"),
     path("newcourse/", login_required(views.CourseCreate.as_view()), name="newcourse"),
     path("course/<int:pk>", login_required(views.CourseDetail.as_view()), name="course"),
     path("removecourse/<int:pk>", login_required(views.CourseDelete.as_view()), name="removecourse"),
@@ -24,7 +25,6 @@ urlpatterns = [
     path("deletematerial/<int:course_pk>/<int:pk>", login_required(views.MaterialDelete.as_view()), name="removematerial"),
     path("course/<int:pk>/newassignment", login_required(views.AssignmentCreate.as_view()), name="newassignment"),
     path("deleteassignment/<int:course_pk>/<int:pk>", login_required(views.AssignmentDelete.as_view()), name="removeassignment"),
-    path("courselist/", login_required(views.CourseList.as_view()), name="courselist"),
 
     # URLs for enrollment management
     path("enrollstudents/<int:pk>", login_required(views.EnrollStudents.as_view()), name="enrollstudents"),	#performed by instructor

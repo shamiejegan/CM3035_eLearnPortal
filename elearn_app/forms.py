@@ -70,8 +70,17 @@ class MaterialForm(forms.ModelForm):
         model = Material
         fields = ['title', 'file']
 
+    def clean_file(self):
+        # restrict file size of upload to 10MB 
+        file = self.cleaned_data['file']
+        max_size = 10 * 1024 * 1024 
+        if file.size > max_size:
+            raise forms.ValidationError("File size exceeds the maximum limit of 10MB. Please upload a smaller file.")
+        return file
+
 # https://pypi.org/project/django-bootstrap-datepicker-plus/
 from bootstrap_datepicker_plus.widgets import DateTimePickerInput
+from django.utils import timezone
 class AssignmentForm(forms.ModelForm):
     class Meta:
         model = Assignment
@@ -82,7 +91,14 @@ class AssignmentForm(forms.ModelForm):
         }
         # modify labels 
         labels = {
-            'title': 'Assignment Name',	
+            'title': 'Assignment Name',    
             'startdate': 'Start Date',
             'deadline': 'Deadline',
         }
+
+    def clean_deadline(self):
+        # check if the deadaline is in the future, otherwise raise an error
+        deadline = self.cleaned_data['deadline']
+        if deadline < timezone.now():
+            raise forms.ValidationError("End date entered has already passed. Please set a deadline for a future date.")
+        return deadline

@@ -10,6 +10,10 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
+        <!-- catch errors -->
+        {% if form.errors %}
+        <div class="alert alert-warning"><p>The following errors have been detected in your submission:</p>{{ form.errors }}</div>
+        {% endif %}
         <button type="submit" class="btn btn-primary">Add</button>
     </form>
 </div>

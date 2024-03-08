@@ -20,11 +20,11 @@
             </div>
             {% if assignments %}
             <table class="table">
-                <th>S/N</th>
-                <th>Assignment</th>
-                <th>Start Date</th>
-                <th>Due Date</th>
-                {%if user_profile.is_instructor %}<th>Action</th>{% endif %}
+                <th style="width:8%">S/N</th>
+                <th style="width:32%">Assignment</th>
+                <th style="width:20%">Start Date</th>
+                <th style="width:20%">Due Date</th>
+                {%if user_profile.is_instructor %}<th style="width:10%">Action</th>{% endif %}
                 {% for assignment in assignments %}
                 <tr>
                     <td>{{forloop.counter}}</td>
@@ -48,9 +48,9 @@
             </div>
             {% if materials %}
             <table class="table">
-                <th>S/N</th>
-                <th>Material</th>
-                {%if user_profile.is_instructor %}<th>Action</th>{% endif %}
+                <th style="width:8%">S/N</th>
+                <th style="width:82%">Material</th>
+                {%if user_profile.is_instructor %}<th style="width:10%">Action</th>{% endif %}
                 {% for material in materials %}
                 <tr>
                     <td>{{forloop.counter}}</td>
