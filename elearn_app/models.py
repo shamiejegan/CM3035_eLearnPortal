@@ -63,4 +63,8 @@ class Feedback(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='feedbacks_received')
     student = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='feedbacks_given')
     feedback_text = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.feedback_text
 

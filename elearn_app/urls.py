@@ -29,6 +29,10 @@ urlpatterns = [
     # URLs for enrollment management
     path("enroll/<int:pk>", views.enroll, name="enroll"), #performed by student
     path("unenroll/<int:courseid>/<int:studentid>/", views.unenroll, name="unenroll"),	
+
+    # URLs for feedbacks 
+    path("feedback/<int:courseid>/", login_required(views.FeedbackCreate.as_view()), name="feedback"),
+
     # URLs for API
     path("api/course/<int:pk>", api.course_detail, name="api_course"),
 

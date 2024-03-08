@@ -9,8 +9,8 @@
     <div class="col-8">
         <div class="course-title-section">
             <h2>{{course.module_code}} ({{course.title}})</h2>
-            {%if user_profile.is_student%}<a class="btn btn-blue" href="/feedback/{{course.id}}/{{user.id}}">Leave a Feedback</a>{% endif %}
-            {%if user_profile.is_student%}<a class="btn btn-red btn-danger" href="/unenroll/{{course.id}}/{{user.id}}">Withdraw From Course</a>{% endif %}
+            {%if user_profile.is_student%}<a class="btn-blue" href="/feedback/{{course.id}}">Leave a Feedback</a>{% endif %}
+            {%if user_profile.is_student%}<a class="btn-red btn-danger" href="/unenroll/{{course.id}}/{{user.id}}">Withdraw From Course</a>{% endif %}
             {%if user_profile.is_instructor %}<a class="btn btn-red btn-danger" href="/removecourse/{{course.id}}">Delete Course</a>{% endif %}
         </div>
         <div class="page-section faded-background">
@@ -32,7 +32,7 @@
                     <td>{{assignment}}</td>
                     <td>{{assignment.startdate}}</td>
                     <td>{{assignment.deadline}}</td>
-                    {%if user_profile.is_instructor %}<td><a class="btn-red" href="/deleteassignment/{{course.id}}/{{assignment.id}}">Delete</a></td>{% endif %}
+                    {%if user_profile.is_instructor %}<td><a style="color:rgb(236, 84, 84)" href="/deleteassignment/{{course.id}}/{{assignment.id}}">Delete</a></td>{% endif %}
                 </tr>
                 {% endfor %}
             </table>
@@ -56,7 +56,7 @@
                 <tr>
                     <td>{{forloop.counter}}</td>
                     <td><a href="{{material.file.url}}" target="_blank">{{material}}</a></td>
-                    {%if user_profile.is_instructor %}<td><a class="btn-red" href="/deletematerial/{{course.id}}/{{material.id}}">Delete</a></td>{% endif %}
+                    {%if user_profile.is_instructor %}<td><a style="color:rgb(236, 84, 84)" href="/deletematerial/{{course.id}}/{{material.id}}">Delete</a></td>{% endif %}
                 </tr>
                 {% endfor %}
             </table>
@@ -64,6 +64,56 @@
             <p>No materials uploaded yet.</p>
             {% endif %}
         </div>
+
+        <!-- Feedback section visible to instructors lists all -->
+        {% if user_profile.is_instructor %}
+        <div class="page-section faded-background">
+            <div class="heading-with-button">
+                <h3>Feedback Received</h3>
+            </div>
+            {% if feedbacks %}
+            <table class="table">
+                <th style="width:8%">S/N</th>
+                <th style="width:72%">Feedback</th>
+                <th style="width:20%">Submitted Time</th>
+                {% for feedback in feedbacks %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{feedback}}</a>
+                    <td>{{feedback.timestamp}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p>No feedbacks received yet.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Feedback section visible to student lists only feedback they have shared -->
+        {% if user_profile.is_student %}
+        <div class="page-section faded-background">
+            <div class="heading-with-button">
+                <h3>Feedback Shared</h3>
+            </div>
+            {% if feedbacks_shared %}
+            <table class="table">
+                <th style="width:8%">S/N</th>
+                <th style="width:72%">Feedback</th>
+                <th style="width:20%">Submitted Time</th>
+                {% for feedback in feedbacks_shared %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{feedback}}</a>
+                    <td>{{feedback.timestamp}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p>No feedbacks shared yet.</p>
+            {% endif %}
+        </div>
+        {% endif %}
 
     </div>
     <div class="col-4">

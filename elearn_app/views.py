@@ -207,6 +207,9 @@ class CourseDetail(DetailView):
         context["materials"] = course.materials.all()
         # get all the assignments for the course
         context["assignments"] = course.assignments.all()
+        # get all the feedback for the course 
+        context["feedbacks"] = course.feedbacks_received.all()
+        context["feedbacks_shared"] = context["user_profile"].feedbacks_given.all()
         return context
 
 class CourseCreate(PermissionRequiredMixin, CreateView):
@@ -455,3 +458,31 @@ def unenroll(request, courseid, studentid):
     course.students.remove(user_profile)
     return HttpResponseRedirect("/")
 
+
+# Feedback views
+class FeedbackCreate(CreateView): 
+    model = Feedback
+    form_class = FeedbackForm
+    template_name = "elearn/feedback_form.html"
+
+    def get_success_url(self):
+        return reverse('course', kwargs={'pk': self.kwargs['courseid']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        course = Course.objects.get(pk=self.kwargs['courseid'])
+        student = UserProfile.objects.get(user=self.request.user)
+        context["course"] = course
+        context["student"] = student
+        return context
+
+    def form_valid(self, form):
+        # Get the course object
+        course = Course.objects.get(pk=self.kwargs['courseid'])
+        student = UserProfile.objects.get(user=self.request.user)
+        # add feedback to the course
+        feedback = form.save(commit=False)
+        feedback.course = course
+        feedback.student = student
+        feedback.save()
+        return super().form_valid(form)

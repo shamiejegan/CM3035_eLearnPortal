@@ -102,3 +102,14 @@ class AssignmentForm(forms.ModelForm):
         if deadline < timezone.now():
             raise forms.ValidationError("End date entered has already passed. Please set a deadline for a future date.")
         return deadline
+
+class FeedbackForm(forms.ModelForm): 
+    class Meta:
+        model = Feedback
+        fields = ['feedback_text']
+        labels = {
+            'feedback_text': '',
+        }
+        widgets = {
+            'feedback_text': forms.Textarea(attrs={'rows': 10, 'style': 'width:100%'}),
+        }
