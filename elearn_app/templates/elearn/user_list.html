@@ -4,6 +4,12 @@
 {% block content %}
 
 {% include './base/navigation.html' %}
+
+<!-- page should only be visible to instructors -->
+{% if not user_profile.is_instructor %}
+<p>This page is not visible to students. If you are an instructor, please login again.</p>
+{% else %}
+
 <div class="row">
     <div class="col-12">
         <div class="page-section">
@@ -31,7 +37,7 @@
                         <!-- only show student profiles -->
                         {% if student.userprofile.is_student %}
                         <tr>
-                            <td><a href="/profile/{{ user.id }}">{{ student.first_name }} {{ student.last_name }}</a></td>
+                            <td><a href="/profile/{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</a></td>
                             <td>{{ student.email }}</td>
                         </tr>
                         {% endif %}
@@ -69,4 +75,6 @@
         </div>
     </div>
 </div>
+{% endif %}
+
 {% endblock %}

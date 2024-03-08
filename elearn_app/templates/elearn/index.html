@@ -9,7 +9,6 @@
         <div class="page-section">
             <div class="heading-with-button">
                 <h2>About Me</h2>
-                <!-- <a class="btn-blue" href="/updateprofile/">Update</a> -->
             </div>
 
             <div class="profile">
@@ -46,7 +45,7 @@
             <table class="table">
                 <th>Module Code</th>
                 <th>Title</th>
-                <th>Instructor</th>
+                <th>Teacher</th>
                 {% for enrolled in courses_enrolled %}
                 <tr>
                     <td><a href="/course/{{enrolled.id}}">{{ enrolled.module_code }}</a></td>

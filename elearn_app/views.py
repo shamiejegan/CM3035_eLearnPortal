@@ -8,7 +8,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 
 from .models import * 
 from .forms import *
@@ -111,13 +112,13 @@ class ProfileDetail(DetailView):
         # Get the user with primary key
         user = self.get_object()
         # Get the details associated with the logged-in user
-        context["requester_user_profile"] = UserProfile.objects.get(user=self.request.user)
-        context["requester_enrolled_courses"] = context["requester_user_profile"].courses_enrolled.all()
+        context["user_profile"] = UserProfile.objects.get(user=self.request.user)
+        context["enrolled_courses"] = context["user_profile"].courses_enrolled.all()
         # Get the details associated with the profile we are viewing
         user_profile = get_object_or_404(UserProfile, user=user)
-        context["courses_taught"] = user_profile.courses_taught.all()
-        context["courses_enrolled"] = user_profile.courses_enrolled.all()
-        context["user_profile"] = user_profile            
+        context["other_courses_taught"] = user_profile.courses_taught.all()
+        context["other_courses_enrolled"] = user_profile.courses_enrolled.all()
+        context["other_user_profile"] = user_profile            
         return context
 
 class PictureUpdate(UpdateView):
@@ -184,22 +185,32 @@ class CourseDetail(DetailView):
     template_name = "elearn/course.html"
     context_object_name = "course"
     def get_context_data(self, **kwargs):
-        if not self.request.user.is_authenticated:
-            return {'authenticated': False}        
-        else:
-            context = super().get_context_data(**kwargs)
-            course = self.object
-            context["students"] = Course.objects.get(pk=course.id).students.all()
-            context["instructor"] = Course.objects.get(pk=course.id).instructor
-            context["user_profile"] = UserProfile.objects.get(user=self.request.user)
-            context["user"] = self.request.user
-            # get all the materials for the course
-            context["materials"] = course.materials.all()
-            # get all the assignments for the course
-            context["assignments"] = course.assignments.all()
-            return context
+        context = super().get_context_data(**kwargs)
+        course = self.object
+        context["students"] = Course.objects.get(pk=course.id).students.all()
+        context["instructor"] = Course.objects.get(pk=course.id).instructor
+        context["user_profile"] = UserProfile.objects.get(user=self.request.user)
+        context["user"] = self.request.user
+        # get all the materials for the course
+        context["materials"] = course.materials.all()
+        # get all the assignments for the course
+        context["assignments"] = course.assignments.all()
+        return context
 
-class CourseCreate(CreateView):
+class CourseCreate(PermissionRequiredMixin, CreateView):
+    permission_required = 'elearn_app.add_course'
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            if not request.user.has_perm('elearn_app.add_course'):
+                # Return 404 error if user does not have permission to add a course
+                return HttpResponse(status=404) 
+        except PermissionDenied:
+            # Handle PermissionDenied exception without raising it further
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
+    # if there is no issues with permissions
     model = Course
     template_name = "elearn/course_form.html"
     form_class = CourseForm
