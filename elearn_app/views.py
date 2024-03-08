@@ -222,6 +222,19 @@ class CourseCreate(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 class CourseDelete(DeleteView):
+    permission_required = 'elearn_app.delete_course'
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            if not request.user.has_perm('elearn_app.delete_course'):
+                # Return 404 error if user does not have permission to add a course
+                return HttpResponse(status=404) 
+        except PermissionDenied:
+            # Handle PermissionDenied exception without raising it further
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
+    # if there is no issues with permissions
     model = Course
     template_name = "elearn/course_confirm_delete.html"
     success_url = "/"

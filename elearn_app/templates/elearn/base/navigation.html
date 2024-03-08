@@ -3,10 +3,10 @@
     <div class="nav-bar-left">
         <a href="/">Home</a>
         <!-- only show course list to students -->
-        {% if user_profile.is_student %}<a href="/courselist/">Find Courses</a>{% endif %}
+        <a href="/courselist/">Find Courses</a>
         <!-- only show user list to instructors -->
         {% if user_profile.is_instructor %}<a href="/userlist/">Find Users</a>{% endif %}
-        <a href="/">APIs</a>
+        <a href="/">My Data (API)</a>
     </div>
     <a id="logout" href="/logout">Logout</a>
 </div>

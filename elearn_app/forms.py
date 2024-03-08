@@ -2,6 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from .models import * 
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 
 class UserForm(ModelForm):
     email = forms.EmailField(required=True)
@@ -12,7 +13,6 @@ class UserForm(ModelForm):
     class Meta:
         model = User
         fields = ['email', 'password', 'first_name', 'last_name']
-
 
 class UserProfileForm(ModelForm):
 
@@ -51,8 +51,18 @@ class CourseForm(forms.ModelForm):
     # ensure that module_code does not already exist
     def clean_module_code(self):
         module_code = self.cleaned_data['module_code']
+
+        # Set regex validator to only accept values in fromat of two capital letters followed by four digits. Assign message if invalid
+        regex_validator = RegexValidator(
+            regex=r'^[A-Z]{2}\d{4}$',
+            message="Invalid module code format. Module code should be two capital letters followed by four digits. Example: AB1234"
+        )
+        regex_validator(module_code)  
+        
+        # check if module_code already exists
         if Course.objects.filter(module_code=module_code).exists():
             raise forms.ValidationError("Module code already exists")
+        
         return module_code
 
 class MaterialForm(forms.ModelForm):
