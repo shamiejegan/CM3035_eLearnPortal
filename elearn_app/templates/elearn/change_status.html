@@ -1,0 +1,18 @@
+{% extends './base/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+{% include './base/navigation.html' %}
+
+<div class="form-section profile-update">
+    <h2>Update Status</h2>
+    <form id="statusForm" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="statusInput">Status:</label>
+        <input type="text" id="statusInput" name="status" value="{{form.instance.status}}">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+
+{% endblock %}

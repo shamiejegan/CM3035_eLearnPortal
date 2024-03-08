@@ -120,14 +120,49 @@ class ProfileDetail(DetailView):
         context["user_profile"] = user_profile            
         return context
 
-class ProfileUpdate(UpdateView):
+class PictureUpdate(UpdateView):
     model = UserProfile
-    template_name = "elearn/profile_form.html"
-    form_class = UpdateProfileForm
+    template_name = "elearn/change_photo.html"
+    form_class = UserProfileForm
     success_url = "/"
 
     def get_object(self, queryset=None):
         return self.request.user.userprofile
+
+    def form_valid(self, form):
+        # Get the user profile object
+        user_profile = form.save(commit=False)
+        # add the uploaded photo to the user profile
+        user_profile.photo = form.cleaned_data['photo']
+        user_profile.save()
+        return super().form_valid(form)
+    
+class StatusUpdate(UpdateView):
+    model = UserProfile
+    template_name = "elearn/change_status.html"
+    form_class = UpdateStatusForm
+    success_url = "/"
+
+    def get_object(self, queryset=None):
+        return self.request.user.userprofile
+
+    def form_valid(self, form):
+        # Get the user profile object
+        user_profile = form.save(commit=False)
+        # add the uploaded photo to the user profile
+        user_profile.status = form.cleaned_data['status']
+        user_profile.save()
+        return super().form_valid(form)
+    
+
+# class ProfileUpdate(UpdateView):
+#     model = UserProfile
+#     template_name = "elearn/profile_form.html"
+#     form_class = UpdateProfileForm
+#     success_url = "/"
+
+#     def get_object(self, queryset=None):
+#         return self.request.user.userprofile
 
 # Course views
 class CourseDetail(DetailView):

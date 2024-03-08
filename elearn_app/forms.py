@@ -31,15 +31,14 @@ class UserProfileForm(ModelForm):
         cleaned_data['is_instructor'] = 'False'
         return cleaned_data
 
-class UpdateProfileForm(ModelForm):
+class UpdateStatusForm(ModelForm):
     class Meta:
         model = UserProfile
-        fields = [ 'status', 'photo']
+        fields = ['status']
 
     def __init__(self, *args, **kwargs):
-        super(UpdateProfileForm, self).__init__(*args, **kwargs)
-        # photo and status are optional
-        self.fields['photo'].required = False 
+        super(UpdateStatusForm, self).__init__(*args, **kwargs)
+        # status is optional
         self.fields['status'].required = False 
 
 class CourseForm(forms.ModelForm):

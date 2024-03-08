@@ -12,7 +12,8 @@ urlpatterns = [
     path("register/", views.register, name="register"),
 
     path("profile/<int:pk>", login_required(views.ProfileDetail.as_view()), name="profile"),
-    path("updateprofile/<int:pk>", login_required(views.ProfileUpdate.as_view()), name="updateprofile"),
+    path("change-photo/", login_required(views.PictureUpdate.as_view()), name="change_photo"),
+    path("update-status/", login_required(views.StatusUpdate.as_view()), name="update_status"),
 
     # URLs for course management
     path("newcourse/", login_required(views.CourseCreate.as_view()), name="newcourse"),

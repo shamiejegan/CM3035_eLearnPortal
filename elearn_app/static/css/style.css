@@ -119,6 +119,9 @@ label  {
     border-radius: 50%;
     border: #AAA 2px solid ;
 }
+.profile-picture {
+    margin-right: 20px;
+}
 .profile-info {
     margin-left: 20px;
 }	

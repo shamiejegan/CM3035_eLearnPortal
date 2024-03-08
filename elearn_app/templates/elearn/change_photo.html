@@ -1,0 +1,28 @@
+{% extends './base/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+{% include './base/navigation.html' %}
+
+<div class="form-section profile-update">
+    <h2>Update Profile Photo</h2>
+    <div>
+        <p><strong>Current Image:</strong></p>
+        {% if form.instance.photo %}
+            <!-- show current image -->
+            <img style="width:100px;" src="{{ form.instance.photo.url }}" alt="Current Image">
+        {% else %}
+            <!-- if not image has been uploaded yet, and default image is not being assigned -->
+            <em>No image uploaded</em>
+        {% endif %}
+    </div>
+    <form id="profileForm" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="photoInput">Profile Picture:</label>
+        <input type="file" id="photoInput" name="photo" accept="image/*">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+
+{% endblock %}
