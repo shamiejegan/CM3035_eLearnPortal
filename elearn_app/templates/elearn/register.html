@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="form-section">
-    <h2>Register</h2>
+    <h2>Student Registration</h2>
     {% if registered %}
         {% bootstrap_messages %}
         <div class="alert alert-success" role="alert">
@@ -14,7 +14,7 @@
             {% csrf_token %}
             {{ user_form.as_p}}
             {{ profile_form.as_p}}
-            <input type="submit" name="submit" value="Register" class="btn-yellow" />
+            <input type="submit" name="submit" value="Register" class="btn-yellow" style="width: 100%;"/>
         </form>
         {% if error %}
             {% bootstrap_messages %}
@@ -22,20 +22,7 @@
                 {{ error }}        
             </div>
         {% endif %}
-        <p>Already have an account? <a href="/login">Login</a></p>
+        <p style="text-align: center;">Already have an account? <a href="/login">Login</a> instead.</p>
     {% endif %}
 </div>
 {% endblock %}
-
-<script>
-    // JavaScript to toggle form fields based on checkbox selection
-    document.getElementById("id_is_student").addEventListener("change", function () {
-        var studentFields = document.getElementById("student_fields");
-        studentFields.style.display = this.checked ? "block" : "none";
-    });
-
-    document.getElementById("id_is_instructor").addEventListener("change", function () {
-        var instructorFields = document.getElementById("instructor_fields");
-        instructorFields.style.display = this.checked ? "block" : "none";
-    });
-</script>

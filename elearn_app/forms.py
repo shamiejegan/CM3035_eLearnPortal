@@ -15,7 +15,6 @@ class UserForm(ModelForm):
 
 
 class UserProfileForm(ModelForm):
-    user_student = forms.ChoiceField(label='Select Role', choices=[(True, 'Student'), (False, 'Instructor')])
 
     class Meta:
         model = UserProfile
@@ -28,9 +27,8 @@ class UserProfileForm(ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        user_student = cleaned_data.get('user_student')
-        cleaned_data['is_student'] = user_student == 'True'
-        cleaned_data['is_instructor'] = user_student == 'False'
+        cleaned_data['is_student'] = 'True'
+        cleaned_data['is_instructor'] = 'False'
         return cleaned_data
 
 class UpdateProfileForm(ModelForm):

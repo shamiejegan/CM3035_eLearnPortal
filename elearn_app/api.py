@@ -1,11 +1,11 @@
 from django.http import JsonResponse, HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser 
+from rest_framework.decorators import api_view
 
 from .models import *
 from .serializers import *
 
-@csrf_exempt
+@api_view(['GET'])
 def course_detail(request, pk): 
     try: 
         course = Course.objects.get(pk=pk)

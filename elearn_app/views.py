@@ -3,6 +3,7 @@ from django.forms import BaseModelForm
 from django.shortcuts import render
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group, User
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
@@ -27,7 +28,7 @@ def register(request):
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
 
-        if user_form.is_valid() and profile_form.is_valid(): #TODO: Add validation for forms
+        if user_form.is_valid() and profile_form.is_valid(): 
             try: 
                 user = user_form.save(commit=False)
                 user.username = user.email  # Set username as email
@@ -40,25 +41,18 @@ def register(request):
                 if "photo" in request.FILES:
                     profile.photo = request.FILES["photo"]
                 else:
-                    profile.photo = "static/images/default.jpg"
+                    profile.photo = "elearn_app/user_photos/default_user.png"
 
-                # Add user to the appropriate group
-                user_student = request.POST.get('user_student') 
-                if user_student == 'True':
-                    student_group = Group.objects.get(name='student')
-                    student_group.user_set.add(user)
-                    profile.is_student = True
-                    profile.is_instructor = False
-                else:
-                    instructor_group = Group.objects.get(name='instructor')
-                    instructor_group.user_set.add(user)
-                    profile.is_student = False
-                    profile.is_instructor = True
+                # Add user to student group 
+                student_group = Group.objects.get(name='student')
+                student_group.user_set.add(user)
+                profile.is_student = True
+                profile.is_instructor = False
 
                 profile.save()
                 registered = True
             except IntegrityError:
-                # Show warning if the 
+                # Show warning if the account already exists 
                 return render(request, "elearn/register.html", {"user_form": user_form, "profile_form": profile_form, "registered": registered, "error": "You already have an account. Please login instead."})
 
         else:
@@ -95,20 +89,17 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect("/login")
 
+@login_required
 def index(request):
-    # first check if the user is logged in, show login page if they are not already logged in  
-    if request.user.is_authenticated:
-        # Retrieve the User details associated with the logged-in user
-        user = User.objects.get(username=request.user)
-        # Retrieve the UserProfile associated with the logged-in user
-        user_profile = UserProfile.objects.get(user=request.user)
-        # Get courses taught by the instructor (if any)
-        courses_taught = user_profile.courses_taught.order_by('module_code')
-        # Get courses enrolled by the student (if any)
-        courses_enrolled = user_profile.courses_enrolled.order_by('module_code')
-        return render(request, "elearn/index.html", {"user":user, "user_profile": user_profile, "courses_taught": courses_taught, "courses_enrolled": courses_enrolled})
-    else:
-        return HttpResponseRedirect("/login")
+    # Retrieve the User details associated with the logged-in user
+    user = User.objects.get(username=request.user)
+    # Retrieve the UserProfile associated with the logged-in user
+    user_profile = UserProfile.objects.get(user=request.user)
+    # Get courses taught by the instructor (if any)
+    courses_taught = user_profile.courses_taught.order_by('module_code')
+    # Get courses enrolled by the student (if any)
+    courses_enrolled = user_profile.courses_enrolled.order_by('module_code')
+    return render(request, "elearn/index.html", {"user":user, "user_profile": user_profile, "courses_taught": courses_taught, "courses_enrolled": courses_enrolled})
 
 class ProfileDetail(DetailView):
     model = User
@@ -126,7 +117,7 @@ class ProfileDetail(DetailView):
         user_profile = get_object_or_404(UserProfile, user=user)
         context["courses_taught"] = user_profile.courses_taught.all()
         context["courses_enrolled"] = user_profile.courses_enrolled.all()
-        context["user_profile"] = user_profile
+        context["user_profile"] = user_profile            
         return context
 
 class ProfileUpdate(UpdateView):
@@ -144,18 +135,21 @@ class CourseDetail(DetailView):
     template_name = "elearn/course.html"
     context_object_name = "course"
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        course = self.object
-        context["students"] = Course.objects.get(pk=course.id).students.all()
-        context["instructor"] = Course.objects.get(pk=course.id).instructor
-        context["user_profile"] = UserProfile.objects.get(user=self.request.user)
-        context["user"] = self.request.user
-        # get all the materials for the course
-        context["materials"] = course.materials.all()
-        # get all the assignments for the course
-        context["assignments"] = course.assignments.all()
-        return context
-    
+        if not self.request.user.is_authenticated:
+            return {'authenticated': False}        
+        else:
+            context = super().get_context_data(**kwargs)
+            course = self.object
+            context["students"] = Course.objects.get(pk=course.id).students.all()
+            context["instructor"] = Course.objects.get(pk=course.id).instructor
+            context["user_profile"] = UserProfile.objects.get(user=self.request.user)
+            context["user"] = self.request.user
+            # get all the materials for the course
+            context["materials"] = course.materials.all()
+            # get all the assignments for the course
+            context["assignments"] = course.assignments.all()
+            return context
+
 class CourseCreate(CreateView):
     model = Course
     template_name = "elearn/course_form.html"
@@ -214,7 +208,6 @@ class MaterialCreate(CreateView):
         material.save()
         return super().form_valid(form)
 
-
 class MaterialDelete(DeleteView):
     model = Material
     template_name = "elearn/material_confirm_delete.html"
@@ -227,7 +220,6 @@ class MaterialDelete(DeleteView):
     
     def get_success_url(self):
         return reverse('course', kwargs={'pk': self.kwargs['course_pk']})
-
 
 class AssignmentCreate(CreateView):
     model = Assignment
@@ -297,12 +289,14 @@ class EnrollStudents(UpdateView):
         
         return super().form_valid(form)
 
+@login_required
 def enroll(request, pk):
     course = Course.objects.get(pk=pk)
     user_profile = UserProfile.objects.get(user=request.user)
     course.students.add(user_profile)
     return HttpResponseRedirect(reverse('course', kwargs={'pk': pk}))
 
+@login_required
 def unenroll(request, pk):    
     course = Course.objects.get(pk=pk)
     user_profile = UserProfile.objects.get(user=request.user)

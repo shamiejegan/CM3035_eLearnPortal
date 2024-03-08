@@ -61,6 +61,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+LOGIN_URL = 'login'
+
 ROOT_URLCONF = 'elearn_project.urls'
 
 TEMPLATES = [
