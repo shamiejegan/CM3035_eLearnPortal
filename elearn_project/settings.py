@@ -34,8 +34,9 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'elearn_app',
+    'chat',
     'channels',
+    'elearn_app',
     'rest_framework',
     'django_bootstrap5',
     'bootstrap_datepicker_plus',
@@ -84,6 +85,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'elearn_project.wsgi.application'
+ASGI_APPLICATION = "elearn_project.routing.application" 
 
 GRAPH_MODELS = {
   'app_labels': ["elearn_app","auth.User"],
