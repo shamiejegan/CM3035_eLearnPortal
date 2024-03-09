@@ -2,6 +2,8 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
+{% include './base/navigation-loggedout.html' %}
+
 <div class="form-section">
     <h2>Student Registration</h2>
     {% if registered %}

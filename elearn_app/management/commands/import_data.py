@@ -9,6 +9,7 @@ class Command(BaseCommand):
             import_scripts.import_user('elearn_app/data/rawdata/CM3035 Final Assignment Data - User.csv')
             import_scripts.import_userProfile('elearn_app/data/rawdata/CM3035 Final Assignment Data - UserProfile.csv')
             import_scripts.import_course('elearn_app/data/rawdata/CM3035 Final Assignment Data - Course.csv')
+            import_scripts.import_studentenrollment('elearn_app/data/rawdata/CM3035 Final Assignment Data - StudentEnrollment.csv')
             import_scripts.import_assignment('elearn_app/data/rawdata/CM3035 Final Assignment Data - Assignment.csv')
             import_scripts.import_material('elearn_app/data/rawdata/CM3035 Final Assignment Data - Material.csv')
             import_scripts.import_feedback('elearn_app/data/rawdata/CM3035 Final Assignment Data - Feedback.csv')

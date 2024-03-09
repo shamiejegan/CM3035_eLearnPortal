@@ -114,6 +114,31 @@ def import_course(csv_file_path):
             # save the record
             course.save()
 
+def import_studentenrollment(csv_file_path):
+    enrollments = defaultdict(list)
+
+    # read data from csv 
+    with open(csv_file_path, 'r', encoding='utf-8') as csv_file: 
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        header = csv_reader.__next__() 
+        for row in csv_reader: 
+            enrollments[row[0]] = row[1:]
+            
+    for student_email, data in enrollments.items(): 
+        module_code = data[0]
+        # find the student's profile based on their email address 
+        student = UserProfile.objects.get(user__email=student_email)
+        # find course based on module code
+        course = Course.objects.get(module_code=module_code)
+
+        if student and course:
+            # skip record if the student is already enrolled in the course
+            if course.students.filter(user=student.user).exists():
+                continue
+            # otherwise add the record to the table 
+            course.students.add(student)
+            course.save()
+
 def import_assignment(csv_file_path):
     assignments = defaultdict(list)
 
