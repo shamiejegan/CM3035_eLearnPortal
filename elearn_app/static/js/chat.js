@@ -15,8 +15,23 @@ chatSocket.onopen = function(e) {
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     const chatLog = document.querySelector('#chat-log');
-    chatLog.value += (data.sender + ' (' + data.auth_group + '): ' + data.message + '\n'); 
+    if(data.auth_group==='instructor'){
+        chatLog.value += (data.sender + ' (TEACHER ): ' + data.message + '\n'); 
+    }
+    else{
+        chatLog.value += (data.sender + ': ' + data.message + '\n');
+    }
     chatLog.scrollTop = chatLog.scrollHeight;
+};
+
+// when user closes the chat window
+window.onbeforeunload = function() {
+    chatSocket.send(JSON.stringify({
+        'message': 'Left room',
+        'sender': username, // Include sender's username
+        'auth_group': auth_group // Include sender's auth group
+    }));
+    chatSocket.close();
 };
 
 chatSocket.onclose = function(e) {
