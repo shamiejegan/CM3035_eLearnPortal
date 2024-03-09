@@ -101,7 +101,7 @@ def index(request):
     # Get courses enrolled by the student (if any)
     courses_enrolled = user_profile.courses_enrolled.order_by('module_code')
     # Get notifications for the user
-    notifications = user_profile.notifications_recieved.order_by('timestamp')
+    notifications = user_profile.notifications_recieved.order_by('-timestamp')
     return render(request, "elearn/index.html", {"user":user, "user_profile": user_profile, "courses_taught": courses_taught, "courses_enrolled": courses_enrolled,"notifications": notifications})
 
 class ProfileDetail(DetailView):
