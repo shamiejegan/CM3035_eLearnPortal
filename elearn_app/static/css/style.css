@@ -38,7 +38,7 @@ label  {
 .footer {
     background: #292b2c;
     color: #f7f7f7;
-    padding: 20px;
+    padding: 10px;
     text-align: center;
     position: fixed;
     bottom: 0;
@@ -283,4 +283,15 @@ input[id="photo-clear_id"] {
 
 .input-group-text   {
     line-height: normal;
+}
+
+.chat-log {
+    width: 95%; 
+    height: 200px; 
+    padding: 10px; 
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+    resize: none; /* Disable resizing */
+    overflow-y: auto;
 }
