@@ -118,12 +118,21 @@
     </div>
     <div class="col-4">
         <div class="page-section side-section">
-            <div class="heading-with-button">
-                <h3>People</h3>
-                <!-- go to livechat room with roomname = modulecode -->
-                <a class="btn-blue" href="/chat/{{course.module_code}}">Live Chat</a>
+            <!-- chat section that uses chat app -->
+            <div style="padding-bottom: 15px;">
+                <h3 style="padding: 5px;" id="chatroom_title"> Live Chat</h3>
+                <textarea id="chat-log" class="chat-log" cols="30" rows="5" readonly></textarea>
+                <input id="chat-message-input" type="text"><br>
+                <input id="chat-message-submit" type="button" class="btn btn-blue" value="Send">
+                {{ room_name|json_script:"room-name" }}
+                {{ username|json_script:"username" }}
+                {{ auth_group|json_script:"auth_group" }}
+                <script src="{% static 'js/chat.js' %}"></script>
+                
             </div>
+            <hr>
             <div>
+                <h3>People</h3>
                 <p><em><strong>Instructor:</strong> {{course.instructor.user.get_full_name}}</em></p>
                 <!-- student list -->
                 <!-- Functionality to search students from table -->
@@ -146,19 +155,8 @@
                     {% endif %}
                     {% endfor %}
                 </table>
-
             </div>
-            <!-- embed iframe of another page -->
-            <h3 style="padding: 5px;" id="chatroom_title"> {{room_name}} Live Chat Room</h3>
-            <p id="chat-users"></p>
-            <textarea id="chat-log" class="chat-log" cols="30" rows="5" readonly></textarea>
-            <input id="chat-message-input" type="text" size="100"><br>
-            <input id="chat-message-submit" type="button" value="Send">
-            {{ room_name|json_script:"room-name" }}
-            {{ username|json_script:"username" }}
-            {{ auth_group|json_script:"auth_group" }}
-            <script src="{% static 'js/chat.js' %}"></script>
-        
+
         </div>
     </div>
 </div>

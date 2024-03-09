@@ -210,6 +210,10 @@ class CourseDetail(DetailView):
         # get all the feedback for the course 
         context["feedbacks"] = course.feedbacks_received.all()
         context["feedbacks_shared"] = context["user_profile"].feedbacks_given.all()
+        # for chat
+        context["username"] = self.request.user.get_full_name()
+        context["auth_group"] = "student" if context["user_profile"].is_student else "instructor" if context["user_profile"].is_instructor else "admin"
+        context["room_name"] = course.module_code
         return context
 
 class CourseCreate(PermissionRequiredMixin, CreateView):

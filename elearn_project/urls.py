@@ -22,7 +22,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     # include the elearn_app URL configuration as landing page
-    path('chat/', include('chat.urls')),
     path('', include('elearn_app.urls')),
     path('admin/', admin.site.urls),
 ]

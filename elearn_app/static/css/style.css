@@ -286,7 +286,7 @@ input[id="photo-clear_id"] {
 }
 
 .chat-log {
-    width: 95%; 
+    width: 100%; 
     height: 200px; 
     padding: 10px; 
     font-size: 16px;
@@ -295,3 +295,13 @@ input[id="photo-clear_id"] {
     resize: none; /* Disable resizing */
     overflow-y: auto;
 }
+
+#chat-message-input {
+    width: 100%; 
+    padding: 10px; 
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+    resize: none; /* Disable resizing */
+}
+
