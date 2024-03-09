@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'elearn_app',
+    'channels',
     'rest_framework',
     'django_bootstrap5',
     'bootstrap_datepicker_plus',

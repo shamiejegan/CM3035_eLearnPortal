@@ -34,7 +34,9 @@ urlpatterns = [
     path("feedback/<int:courseid>/", login_required(views.FeedbackCreate.as_view()), name="feedback"),
 
     # URLs for API
-    path("api/course/<int:pk>", api.course_detail, name="api_course"),
+    path("api/course_list/", api.course_list, name="api_courses"),
+    path("api/student_mycourses/", api.student_course, name="api_student_course"),
+    path("api/teacher_mycourses/", api.teacher_course, name="api_student_course"),
 
     # other URLs
     path('404/', views.custom_page_not_found, name='custom_404'), 

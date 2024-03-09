@@ -120,7 +120,8 @@
         <div class="page-section side-section">
             <div class="heading-with-button">
                 <h3>People</h3>
-                <a class="btn-blue" href="/">Live Chat</a>
+                <!-- go to livechat room with roomname = modulecode -->
+                <a class="btn-blue" href="/chat/{{course.module_code}}">Live Chat</a>
             </div>
             <div>
                 <p><em><strong>Instructor:</strong> {{course.instructor.user.get_full_name}}</em></p>
