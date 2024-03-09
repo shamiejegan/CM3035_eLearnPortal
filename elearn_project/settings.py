@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_bootstrap5',
     'bootstrap_datepicker_plus',
+    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -83,6 +84,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'elearn_project.wsgi.application'
 
+GRAPH_MODELS = {
+  'app_labels': ["elearn_app","auth.User"],
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

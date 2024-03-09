@@ -1,0 +1,15 @@
+username,first_name,last_name,email,is_active,password
+t1@t.com,Steven,Disa,t1@t.com,Inactive,123
+t2@t.com,Susan,Demy,t2@t.com,Active,123
+test_student@test.com,Sandy,Soo,test_student@test.com,Active,123
+houstos@gmail.com,Housto,Sanko,houstos@gmail.com,Active,123
+sample@student.com,Amanda,Hopkins,sample@student.com,Active,123
+samanthap@gmail.com,Samantha,Pikkin,samanthap@gmail.com,Active,123
+simaa@gmail.com,Sima,Aruga,simaa@gmail.com,Active,123
+sorgieg@gmail.com,Sorgie,Geordani,sorgieg@gmail.com,Active,123
+stephant@gmail.com,Stephan,Torlini,stephant@gmail.com,Active,123
+susiey@gmail.com,Susie,Yao,susiey@gmail.com,Active,123
+test_teacher@test.com,Timothy,Totter,test_teacher@test.com,Active,CM3035testing
+tw@sjacademy.com,Taylor,Ween,tw@sjacademy.com,Active,CM3035testing
+ta@sjacademy.com,Tomas,Anglo,ta@sjacademy.com,Active,CM3035testing
+fm@sjacademy.com,Fareed,Mustakin,fm@sjacademy.com,Active,CM3035testing

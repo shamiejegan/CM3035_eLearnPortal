@@ -1,0 +1,15 @@
+username,is_student,is_instructor,photo_path,status
+t1@t.com,TRUE,FALSE,elearn_app/user_photos/default_user.png,
+t2@t.com,TRUE,FALSE,elearn_app/user_photos/Singapore_Skyline.png,
+test_student@test.com,TRUE,FALSE,elearn_app/user_photos/lightbulb_yH4Tx01.png,Could this be??
+houstos@gmail.com,TRUE,FALSE,elearn_app/user_photos/default_user.png,
+sample@student.com,TRUE,FALSE,elearn_app/user_photos/default_user.png,
+samanthap@gmail.com,TRUE,FALSE,elearn_app/user_photos/default_user.png,
+simaa@gmail.com,TRUE,FALSE,elearn_app/user_photos/default_user.png,
+sorgieg@gmail.com,TRUE,FALSE,elearn_app/user_photos/man.png,this is me!!
+stephant@gmail.com,TRUE,FALSE,elearn_app/user_photos/default_user.png,
+susiey@gmail.com,TRUE,FALSE,elearn_app/user_photos/default_user.png,
+test_teacher@test.com,FALSE,TRUE,elearn_app/user_photos/feather-pen_IgFAwRG.png,In classes today ~~
+tw@sjacademy.com,FALSE,TRUE,elearn_app/user_photos/painting.png,Busy marking papers this week
+ta@sjacademy.com,FALSE,TRUE,elearn_app/user_photos/Pebbles-Road-Texture.jpg,"I'm new, please introduce yourself!"
+fm@sjacademy.com,FALSE,TRUE,elearn_app/user_photos/male.png,
