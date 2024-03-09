@@ -12,8 +12,28 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'elearn_project.settings')
 django.setup()
 
 from elearn_app.models import UserProfile, Course, Assignment, Material, Feedback
-from django.contrib.auth.models import Group, User
- 
+from django.contrib.auth.models import Group, User, Permission
+
+def create_groups():
+    # create groups if they do not exist
+    group_names = ["instructor", "student"]
+    instructor_permissions = ["add_course", "change_course", "delete_course", "view_course", "add_assignment", "change_assignment", "delete_assignment", "view_assignment", "add_material", "change_material","delete_material", "view_material", "change_feedback", "delete_feedback", "view_feedback","add_notification", "view_notification","change_notification"]
+    student_permissions = ["view_course", "view_assignment", "view_material","add_feedback", "change_feedback", "delete_feedback", "view_feedback","add_notification", "view_notification","change_notification"]
+    for group_name in group_names:
+        if not Group.objects.filter(name=group_name).exists():
+            group = Group.objects.create(name=group_name)
+            # set permissions for each group
+            if group_name == "instructor":
+                instructor_p = Permission.objects.filter(codename__in=instructor_permissions)
+                for permission in instructor_p:
+                    group.permissions.add(permission)
+            if group_name == "student":
+                student_p = Permission.objects.filter(codename__in=student_permissions)
+                for permission in student_p:
+                    group.permissions.add(permission)
+            group.save()
+
+
 def import_user(csv_file_path): 
     users = defaultdict(list)
 
@@ -35,8 +55,8 @@ def import_user(csv_file_path):
             last_name=data[1],
             email=data[2],
             is_active=True if data[3] == 'TRUE' else False,
-            password=data[4]
         )
+        user.set_password(data[4])
         user.save()
 
 def import_userProfile(csv_file_path): 

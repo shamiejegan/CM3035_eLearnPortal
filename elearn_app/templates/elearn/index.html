@@ -85,10 +85,31 @@
     <div class="col-4">
         <div class="page-section side-section">
             <h2>Notifications</h2>
+            <!-- if not notifications are received, just show no notifications message  -->
+            {% if not notifications %}
             <div class="faded-background">
                 <p>There are no notifications at the moment.</p>
             </div>
-
+            <!-- otherwise loop through each notification and add details to each block -->
+            {% else %}
+            {% for notification in notifications %}
+            <!-- only show notifications that have not been read -->
+            {% if not notification.read_status %}
+            <div class="faded-background">
+                <!-- small cross button at top right corner -->
+                <div class="row">
+                    <div class="col-10">
+                        <p class="notification-date">{{notification.timestamp}}</p>
+                    </div>
+                    <div class="col-2">
+                        <p class="notification-close-button"><a href="/mark-as-read/{{notification.id}}" >X</a></p>
+                    </div>
+                </div>
+                <p>{{notification.about_course}}: {{notification.type}}</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %} 
         </div>
     </div>
 </div>

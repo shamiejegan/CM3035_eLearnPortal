@@ -38,6 +38,8 @@ urlpatterns = [
     path("api/student_mycourses/", api.student_course, name="api_student_course"),
     path("api/teacher_mycourses/", api.teacher_course, name="api_student_course"),
 
+    # path for notification 
+    path("mark-as-read/<int:pk>", views.mark_as_read, name="mark_as_read"),
     # other URLs
     path('404/', views.custom_page_not_found, name='custom_404'), 
 ]

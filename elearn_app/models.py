@@ -58,11 +58,14 @@ class Feedback(models.Model):
     def __str__(self):
         return self.feedback_text
 
-class ChatMessage(models.Model):
-    course = models.CharField(max_length=100)  # Identifies the course or room
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    message = models.TextField()
+class Notification(models.Model):
+    id = models.AutoField(primary_key=True)
+    to_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='notifications_recieved')
+    from_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='notifications_sent')
+    about_course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='notifications')
+    type = models.CharField(max_length=256)
+    read_status = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.message
+        return self.type

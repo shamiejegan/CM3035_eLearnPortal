@@ -6,6 +6,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
+            import_scripts.create_groups()
             import_scripts.import_user('elearn_app/data/rawdata/CM3035 Final Assignment Data - User.csv')
             import_scripts.import_userProfile('elearn_app/data/rawdata/CM3035 Final Assignment Data - UserProfile.csv')
             import_scripts.import_course('elearn_app/data/rawdata/CM3035 Final Assignment Data - Course.csv')

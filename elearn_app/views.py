@@ -100,7 +100,9 @@ def index(request):
     courses_taught = user_profile.courses_taught.order_by('module_code')
     # Get courses enrolled by the student (if any)
     courses_enrolled = user_profile.courses_enrolled.order_by('module_code')
-    return render(request, "elearn/index.html", {"user":user, "user_profile": user_profile, "courses_taught": courses_taught, "courses_enrolled": courses_enrolled})
+    # Get notifications for the user
+    notifications = user_profile.notifications_recieved.order_by('timestamp')
+    return render(request, "elearn/index.html", {"user":user, "user_profile": user_profile, "courses_taught": courses_taught, "courses_enrolled": courses_enrolled,"notifications": notifications})
 
 class ProfileDetail(DetailView):
     model = User
@@ -329,6 +331,12 @@ class MaterialCreate(CreateView):
         material = form.save(commit=False)
         material.course = course
         material.save()
+
+        # Create a notification for each student in the course
+        for student in course.students.all():
+            notification = Notification(to_user=student, from_user=course.instructor, about_course=course, type="New Material Added")
+            notification.save()
+
         return super().form_valid(form)
 
 class MaterialDelete(DeleteView):
@@ -389,6 +397,12 @@ class AssignmentCreate(CreateView):
         assignment = form.save(commit=False)
         assignment.course = course
         assignment.save()
+
+        # Create a notification for each student in the course
+        for student in course.students.all():
+            notification = Notification(to_user=student, from_user=course.instructor, about_course=course, type="New Assignment Added")
+            notification.save()
+
         return super().form_valid(form)
 
 class AssignmentDelete(DeleteView):
@@ -453,6 +467,12 @@ def enroll(request, pk):
     course = Course.objects.get(pk=pk)
     user_profile = UserProfile.objects.get(user=request.user)
     course.students.add(user_profile)
+
+    # Create a notification to instructor when student enrolls in the course
+    message = user_profile.user.get_full_name() + " has enrolled in the course."
+    notification = Notification(to_user=course.instructor, from_user=user_profile, about_course=course, type=message)
+    notification.save()
+
     return HttpResponseRedirect(reverse('course', kwargs={'pk': pk}))
 
 @login_required
@@ -490,3 +510,17 @@ class FeedbackCreate(CreateView):
         feedback.student = student
         feedback.save()
         return super().form_valid(form)
+    
+# notifications 
+@login_required
+def mark_as_read(request, pk):
+    # try to get the notificatino based on pk
+    notification = Notification.objects.get(pk=pk)
+    # confirm that the notification comes from the user
+    if notification.to_user != request.user.userprofile:
+        return HttpResponse(status=404)
+    # mark the notification as read
+    notification.read_status = True
+    notification.save()
+
+    return HttpResponseRedirect("/")

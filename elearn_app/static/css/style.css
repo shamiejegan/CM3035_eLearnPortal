@@ -306,3 +306,10 @@ input[id="photo-clear_id"] {
     resize: none; /* Disable resizing */
 }
 
+.notification-close-button {
+    width: 100%;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    text-align: right;
+}

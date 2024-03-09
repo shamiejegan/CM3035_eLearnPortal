@@ -21,3 +21,7 @@ class AssignmentAdmin(admin.ModelAdmin):
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    pass
