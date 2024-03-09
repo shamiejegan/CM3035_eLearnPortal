@@ -1,0 +1,22 @@
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SJ Academy eLearning Platform">
+    <meta name="author" content="Shamie Jegan">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    {% bootstrap_css %}
+    {{ block.super }}
+    {{ form.media }}
+    <link rel="stylesheet" type="text/css" href="../../../static/css/style.css">
+
+</head>
+
+<body>
+    <div class="header">
+        <image id="application-logo" src="../../../static/images/feather-pen.png" alt="SJ Academy Logo" width="100" height="100">
+        <h1 id="application-title">SJ Academy eLearn</h1>
+    </div>

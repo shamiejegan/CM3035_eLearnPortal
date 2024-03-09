@@ -1,0 +1,11 @@
+{% load django_bootstrap5 %}
+
+{% include "./headers.html" %}
+
+<div class="content">
+    {% block content %}
+        Page Rendering...
+    {% endblock %}    
+</div>
+
+{% include "./footer.html" %}

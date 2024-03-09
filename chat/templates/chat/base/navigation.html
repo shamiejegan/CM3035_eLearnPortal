@@ -1,0 +1,13 @@
+{% load django_bootstrap5 %}
+<div class="nav-bar">
+    <div class="nav-bar-left">
+        <a href="/">Home</a>
+        <!-- only show course list to students -->
+        <a href="/courselist/">Find Courses</a>
+        <!-- only show user list to instructors -->
+        {% if user_profile.is_instructor %}<a href="/userlist/">Find Users</a>{% endif %}
+        {% if user_profile.is_instructor %}<a href="/api/teacher_mycourses/">My Data (API)</a>{% endif %}
+        {% if user_profile.is_student %}<a href="/api/student_mycourses/">My Data (API)</a>{% endif %}
+    </div>
+    <a id="logout" href="/logout">Logout</a>
+</div>
