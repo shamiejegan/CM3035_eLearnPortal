@@ -11,7 +11,7 @@ sys.path.append('')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'elearn_project.settings')
 django.setup()
 
-from elearn_app.models import UserProfile, Course, Assignment, Material, Feedback
+from elearn_app.models import UserProfile, Course, Assignment, Material, Feedback, Notification
 from django.contrib.auth.models import Group, User, Permission
 
 def create_groups():
@@ -248,3 +248,32 @@ def import_feedback(csv_file_path):
             
             # save the record
             feedback.save()
+
+def import_notification(csv_file_path):
+    notifications = defaultdict(list)
+
+    # read data from csv 
+    with open(csv_file_path, 'r', encoding='utf-8') as csv_file: 
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        header = csv_reader.__next__() 
+        for row in csv_reader: 
+            notifications[row[0]] = row[1:]
+            
+    # delete existing records 
+    Notification.objects.all().delete()  
+
+    for to_u, data in notifications.items(): 
+        # find course based on module code
+        course = Course.objects.get(module_code=data[1])
+        to_user = UserProfile.objects.get(user__email=to_u)
+        from_user = UserProfile.objects.get(user__email=data[0])
+        # load data to record table 
+        notification = Notification.objects.create(
+            to_user=to_user,
+            from_user=from_user,
+            about_course=course,
+            type=data[2],
+            read_status=True if data[3] == 'TRUE' else False,
+            timestamp=datetime.strptime(data[4], "%Y-%m-%dT%H:%M:%S")
+        )
+        notification.save()

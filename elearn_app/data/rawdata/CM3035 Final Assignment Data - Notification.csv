@@ -1,0 +1,4 @@
+to_user,from_user,about_course,type,read_status,timestamp
+test_teacher@test.com,simaa@gmail.com,CC1030,Sima Aruga has enrolled in the course.,FALSE,2023-12-23T3:20:05
+test_teacher@test.com,simaa@gmail.com,CM1001,Sima Aruga has enrolled in the course.,FALSE,2024-02-23T3:22:03
+fm@sjacademy.com,test_student@test.com,CM1001,Sandy Soo has enrolled in the course.,FALSE,2024-01-23T7:42:35

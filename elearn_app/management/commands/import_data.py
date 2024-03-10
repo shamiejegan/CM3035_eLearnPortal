@@ -14,6 +14,7 @@ class Command(BaseCommand):
             import_scripts.import_assignment('elearn_app/data/rawdata/CM3035 Final Assignment Data - Assignment.csv')
             import_scripts.import_material('elearn_app/data/rawdata/CM3035 Final Assignment Data - Material.csv')
             import_scripts.import_feedback('elearn_app/data/rawdata/CM3035 Final Assignment Data - Feedback.csv')
+            import_scripts.import_notification('elearn_app/data/rawdata/CM3035 Final Assignment Data - Notification.csv')
             self.stdout.write(self.style.SUCCESS('Data import completed successfully.'))
 
         except Exception as e:
