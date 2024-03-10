@@ -1,1 +1,0 @@
-# test api when the course exists, when course does not exist, when invalid value is passed, when the method is not GET

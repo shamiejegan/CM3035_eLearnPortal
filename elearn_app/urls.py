@@ -36,7 +36,7 @@ urlpatterns = [
     # URLs for API
     path("api/course_list/", api.course_list, name="api_courses"),
     path("api/student_mycourses/", api.student_course, name="api_student_course"),
-    path("api/teacher_mycourses/", api.teacher_course, name="api_student_course"),
+    path("api/teacher_mycourses/", api.teacher_course, name="api_teacher_course"),
 
     # path for notification 
     path("mark-as-read/<int:pk>", views.mark_as_read, name="mark_as_read"),
